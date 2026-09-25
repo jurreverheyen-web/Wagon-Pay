@@ -47,14 +47,26 @@ button{border:0;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:65
 .result-row.negative strong{color:#b42318}
 .fiscal-summary{margin-top:16px;padding:14px;border:1px solid #dbe4ee;border-radius:12px;background:#f8fafc}
 .fiscal-summary-title{font-size:13px;font-weight:800;margin-bottom:8px}
+.result-build{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:10px}
+.build-section{border:1px solid var(--line);border-radius:12px;background:#fff;padding:14px}
+.build-section-title{font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.build-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #edf0f3;font-size:13px}
+.build-row:last-child{border-bottom:0}
+.build-row strong{font-weight:800;white-space:nowrap}
+.build-row.negative strong{color:#b42318}
+.build-row.positive strong{color:#087443}
+.build-row.total{margin-top:4px;padding-top:11px;font-size:14px;background:#eef4ff;border-radius:8px;padding-left:9px;padding-right:9px}
+.build-note{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.45}
+@media(max-width:900px){.result-build{grid-template-columns:1fr}}
+
 
 </style>
 </head>
 <body>
-<header style="background:#111827;padding:14px 20px;">
+<header style="background:#111827;padding:14px 20px;text-align:center;">
   <div style="max-width:1180px;margin:auto;">
     <img src="wagon-pay-logo.png" alt="Wagon Pay"
-         style="height:42px;width:auto;display:block;">
+         style="height:42px;width:auto;display:block;margin:0 auto;">
   </div>
 </header>
 <main>
@@ -69,28 +81,35 @@ button{border:0;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:65
 <div class="profile-page-title" id="profilePageTitle">Student loonberekening</div>
 <div class="card">
 <h2>1. Instellingen</h2>
-<div class="formgrid"><div><label>Bruto uurloon (€)</label><input id="rate" type="number" step=".0001" value="15.97"></div>
+<div class="formgrid">
+<div><label>Bruto uurloon (€)</label><input id="rate" type="number" step=".0001" value="15.97"></div>
+<div><label for="studentRSZ" id="rszLabel">Solidariteitsbijdrage (%)</label><input id="studentRSZ" type="number" step=".01" value="2.71" readonly></div>
 <div class="hidden-setting"><label>Overuren 150% (€ / uur)</label><input id="ot150" type="number" step=".0001" value="23.955"></div>
 <div class="hidden-setting"><label>Overuren 200% (€ / uur)</label><input id="ot200" type="number" step=".0001" value="31.94"></div>
 <div class="hidden-setting"><label>Zondagpremie (€ / uur)</label><input id="sunday" type="number" step=".01" value="2.00"></div>
 <div class="hidden-setting"><label>Kledijvergoeding (€ / dag)</label><input id="clothes" type="number" step=".01" value="2.20"></div>
-<div><label for="studentRSZ">Sociale bijdrage (%)</label><input id="studentRSZ" type="number" step=".01" value="2.71" readonly></div>
 <div class="hidden-setting"><label>Overuren vanaf (werkuren)</label><input id="threshold" type="number" step=".01" value="11"></div>
 </div>
-<div id="profileInfo" class="profile-info"></div>
-<div id="studentOnly" class="profile-only"></div>
+
+<div id="studentSettings" class="profile-only">
+  <div class="profile-info">Student: de oorspronkelijke loonopbouw blijft actief, inclusief werken, betaalde pauze, overuren, zondagpremie, bruto RSZ, solidariteitsbijdrage, belastbaar loon, kledij, onkosten en netto premies.</div>
+</div>
+
 <div id="extraFiscal" class="profile-only">
+  <div class="profile-info"><b>Extra — vaste loonparameters</b><br>Uurloon €17,33 · sociale bijdrage 13,07% op het toepasselijke RSZ-forfait · werkbonus automatisch berekend.</div>
   <div class="fiscal-grid" style="margin-top:10px">
     <div><label>Bedrijfsvoorheffing (%)</label><input id="extraBVRate" type="number" step=".01" value="33.31"></div>
+    <div><label>Vakantiegeld reserve (%)</label><input id="extraHolidayRate" type="number" step=".01" value="7.34"></div>
     <div><label>Sociaal abonnement / netto voordeel (€)</label><input id="extraSubscription" type="number" step=".01" value="0"></div>
     <div><label>Kosten eigen werkgever (€)</label><input id="extraEmployerCosts" type="number" step=".01" value="0"></div>
-    <div><label>Vakantiegeld reserve (%)</label><input id="extraHolidayRate" type="number" step=".01" value="7.34"></div>
   </div>
 </div>
+
 <div id="bediendeFiscal" class="profile-only">
+  <div class="profile-info"><b>Bediende — fiscale loonopbouw</b><br>Normale werknemers-RSZ 13,07%, werkbonus en bedrijfsvoorheffing. Het vakantiegeld wordt apart berekend op basis van het ingegeven gemiddelde bruto maandloon.</div>
   <div class="fiscal-grid" style="margin-top:10px">
     <div><label>Bedrijfsvoorheffing (%)</label><input id="bediendeBVRate" type="number" step=".01" value="33.31"></div>
-    <div><label>Gemiddeld bruto maandloon voor vakantiegeld (€)</label><input id="bediendeMonthlyGross" type="number" step=".01" value="0"></div>
+    <div><label>Gemiddeld bruto maandloon voor vakantiegeld (€)</label><input id="bediendeMonthlyGross" type="number" step=".01" value="0" placeholder="0 = huidig bruto"></div>
   </div>
 </div>
 </div>
@@ -123,15 +142,7 @@ button{border:0;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:65
 <div class="kpi"><div class="v" id="overtime">0,00 u</div><div class="l">Overuren</div></div>
 </div>
 <h3>Loonopbouw</h3>
-<div class="result-columns">
-  <div class="result-column">
-    <div class="result-row"><span>Werken</span><strong id="resultWork">€ 0,00</strong></div>
-    <div class="result-row"><span>Pauze betaald</span><strong id="resultBreak">€ 0,00</strong></div>
-    <div class="result-row"><span>Overuren</span><strong id="resultOvertimeMoney">€ 0,00</strong></div>
-    <div class="result-row"><span>Zondagpremie</span><strong id="resultSunday">€ 0,00</strong></div>
-  </div>
-  <div class="result-column" id="resultDetails"></div>
-</div>
+<div id="resultBuild"></div>
 <div class="big-results">
   <div class="big-result gross-result">
     <span>Bruto RSZ</span>
@@ -163,6 +174,7 @@ const PROFILES={
 let currentProfile='student650low';
 function switchProfilePage(profile){
  currentProfile=profile;
+ updateProfileSpecificUI(profile);
  document.querySelectorAll('.profile-tab').forEach(b=>b.classList.toggle('active',b.dataset.profile===profile));
  applyProfile();
 }
@@ -170,18 +182,14 @@ function switchProfilePage(profile){
 function updateProfileSpecificUI(profile){
  const title=document.getElementById('profilePageTitle');
  if(title) title.textContent = profile==='student650low' ? 'Student loonberekening' : (profile==='extra' ? 'Extra loonberekening' : 'Bediende loonberekening');
- const info=document.getElementById('profileInfo');
- if(info){
-   if(profile==='student650low') info.textContent='Student: 2,71% solidariteitsbijdrage. Geen normale RSZ en standaard geen bedrijfsvoorheffing.';
-   else if(profile==='extra') info.textContent='Extra horeca: uurloon €17,33. RSZ wordt berekend op het horeca-forfait, niet op het volledige brutoloon.';
-   else info.textContent='Bediende: normale werknemers-RSZ van 13,07%, met werkbonus en bedrijfsvoorheffing als schatting.';
- }
+ const rszLabel=document.getElementById('rszLabel');
+ if(rszLabel) rszLabel.textContent = profile==='student650low' ? 'Solidariteitsbijdrage (%)' : 'Sociale bijdrage (%)';
  const ex=document.getElementById('extraFiscal');
  const be=document.getElementById('bediendeFiscal');
+ const st=document.getElementById('studentSettings');
  if(ex) ex.style.display=profile==='extra'?'block':'none';
  if(be) be.style.display=profile==='bediende'?'block':'none';
- const student=document.getElementById('studentOnly');
- if(student) student.style.display=profile==='student650low'?'block':'none';
+ if(st) st.style.display=profile==='student650low'?'block':'none';
 }
 function applyProfile(){
  const profile=currentProfile;
@@ -205,6 +213,7 @@ function applyProfile(){
    : 'Sociale bijdrage (%)';
 
  document.getElementById('threshold').value=p.threshold;
+ updateProfileSpecificUI(profile);
  calc();
 }
 const eur=n=>new Intl.NumberFormat('nl-BE',{style:'currency',currency:'EUR'}).format(Number(n)||0);
@@ -533,16 +542,14 @@ function calc(){
 
   const base=reg*rate,breakPay=breaks*rate,v150=ot150h*o150,v200=ot200h*o200,sunday=sunH*sunRate,cloth=clothingDays*clothes;
   const gross=base+breakPay+v150+v200+sunday;
-  let employeeRSZ=0,workBonus=0,taxable=gross,bv=0,otTaxRelief=0,subscription=0,employerCosts=0,holidayGross=0,holidayRSZ=0,holidayTaxable=0,holidayBV=0,holidayNet=0;
+  let employeeRSZ=0,workBonus=0,taxable=gross,bv=0,otTaxRelief=0,subscription=0,employerCosts=0,holidayGross=0,holidayRSZ=0,holidayTaxable=0,holidayBV=0,holidayNet=0,rszBase=0,holidayRateUsed=0;
 
   if(profile==='student650low'){
     employeeRSZ=gross*0.0271;
     taxable=gross-employeeRSZ;
-    // Student: no normal bedrijfsvoorheffing in this calculator.
   } else if(profile==='extra'){
-    const rszBase=extraRszBase();
+    rszBase=extraRszBase();
     employeeRSZ=rszBase*0.1307;
-    // Calibrated to the supplied Extra payslip: 22 hours -> €15.19 workbonus.
     workBonus=Math.min(employeeRSZ,127.54*(work/184.67));
     taxable=gross-employeeRSZ+workBonus;
     const bvRate=num('extraBVRate')/100;
@@ -550,17 +557,17 @@ function calc(){
     otTaxRelief=(ot150h+ot200h)*rate*0.5775;
     subscription=num('extraSubscription');
     employerCosts=num('extraEmployerCosts');
-    // Approximation based on the supplied Extra payslip; editable.
-    holidayGross=gross*(num('extraHolidayRate')/100);
+    holidayRateUsed=num('extraHolidayRate');
+    holidayGross=gross*(holidayRateUsed/100);
     const holidayDouble=holidayGross*0.4433;
     holidayRSZ=holidayDouble*0.1307;
     holidayTaxable=holidayGross-holidayRSZ;
     holidayBV=holidayTaxable*bvRate;
     holidayNet=holidayTaxable-holidayBV;
   } else {
-    employeeRSZ=gross*0.1307;
+    const rawRSZ=gross*0.1307;
     workBonus=workBonusBediende(gross);
-    employeeRSZ=Math.max(0,employeeRSZ-workBonus);
+    employeeRSZ=Math.max(0,rawRSZ-workBonus);
     taxable=gross-employeeRSZ;
     const bvRate=num('bediendeBVRate')/100;
     bv=taxable*bvRate;
@@ -569,8 +576,10 @@ function calc(){
     holidayGross=monthlyGross*0.92;
     holidayRSZ=holidayGross*0.1307;
     holidayTaxable=holidayGross-holidayRSZ;
-    holidayBV=holidayTaxable*(holidayBVRate2026(monthlyGross*12)/100);
+    holidayRateUsed=holidayBVRate2026(monthlyGross*12);
+    holidayBV=holidayTaxable*(holidayRateUsed/100);
     holidayNet=holidayTaxable-holidayBV;
+    rszBase=rawRSZ;
   }
 
   let expenses=0;
@@ -581,79 +590,120 @@ function calc(){
   document.getElementById('net').textContent=eur(net);
   document.getElementById('totalHours').textContent=work.toFixed(2)+' u';
   document.getElementById('overtime').textContent=(ot150h+ot200h).toFixed(2)+' u';
-  document.getElementById('resultWork').textContent=eur(base);
-  document.getElementById('resultBreak').textContent=eur(breakPay);
-  document.getElementById('resultOvertimeMoney').textContent=eur(v150+v200);
-  document.getElementById('resultSunday').textContent=eur(sunday);
-  document.getElementById('resultRSZ').textContent=eur(-employeeRSZ);
-  document.getElementById('resultClothes').textContent=eur(cloth);
-  document.getElementById('resultExpenses').textContent=eur(expenses+subscription+employerCosts);
-  document.getElementById('resultPremiums').textContent=eur(dayAllowanceTotal);
   document.getElementById('resultGross').textContent=eur(gross);
   document.getElementById('resultNet').textContent=eur(net);
 
-  const resultCol2=document.querySelectorAll('.result-column')[1];
-  if(resultCol2){
-    const baseRows=`
-      <div class="result-row"><span>${profile==='student650low'?'Solidariteitsbijdrage':'Werknemersbijdrage RSZ'}</span><strong>${eur(-employeeRSZ)}</strong></div>
-      ${profile!=='student650low'?`<div class="result-row"><span>Werkbonus</span><strong>${eur(workBonus)}</strong></div>`:''}
-      ${profile!=='student650low'?`<div class="result-row"><span>Bedrijfsvoorheffing</span><strong>${eur(-bv)}</strong></div>`:''}
-      ${profile!=='student650low'?`<div class="result-row"><span>Vermindering overuren</span><strong>${eur(otTaxRelief)}</strong></div>`:''}
-      <div class="result-row"><span>Kledijvergoeding</span><strong>${eur(cloth)}</strong></div>
-      <div class="result-row"><span>Onkosten</span><strong>${eur(expenses+subscription+employerCosts)}</strong></div>
-      <div class="result-row"><span>Netto premies</span><strong>${eur(dayAllowanceTotal)}</strong></div>
-    `;
-    let profileRows='';
-    if(profile==='extra'){
-      profileRows=`
-        <div class="result-row"><span>Vakantiegeld reserve</span><strong>${eur(holidayGross)}</strong></div>
-        <div class="result-row"><span>RSZ vakantiegeld</span><strong>${eur(-holidayRSZ)}</strong></div>
-        <div class="result-row"><span>BV vakantiegeld</span><strong>${eur(-holidayBV)}</strong></div>
-        <div class="result-row"><span>Netto vakantiegeld</span><strong>${eur(holidayNet)}</strong></div>`;
-    } else if(profile==='bediende'){
-      const monthlyGross=num('bediendeMonthlyGross')||gross;
-      const hRate=holidayBVRate2026(monthlyGross*12);
-      profileRows=`
-        <div class="result-row"><span>Dubbel vakantiegeld</span><strong>${eur(holidayGross)}</strong></div>
-        <div class="result-row"><span>RSZ vakantiegeld</span><strong>${eur(-holidayRSZ)}</strong></div>
-        <div class="result-row"><span>BV vakantiegeld (${hRate.toFixed(2)}%)</span><strong>${eur(-holidayBV)}</strong></div>
-        <div class="result-row"><span>Netto vakantiegeld</span><strong>${eur(holidayNet)}</strong></div>`;
-    }
-    resultCol2.innerHTML=baseRows+profileRows;
-  }
+  const row=(label,value,cls='')=>`<div class="build-row ${cls}"><span>${label}</span><strong>${eur(value)}</strong></div>`;
+  const hoursRow=(label,hours,unitRate,value,cls='')=>`<div class="build-row ${cls}"><span>${label}<small style="display:block;color:var(--muted);font-size:10px">${hours.toFixed(2)} u × ${eur(unitRate)}</small></span><strong>${eur(value)}</strong></div>`;
+  let html='';
 
-  let extraLines='';
-  if(profile==='extra'){
-    extraLines=`<div class="profile-info"><b>Extra — fiscale opbouw</b><br>
-      RSZ-forfait: ${eur(extraRszBase())} → werknemers-RSZ ${eur(employeeRSZ)}<br>
-      Werkbonus: +${eur(workBonus)} · Belastbaar: ${eur(taxable)}<br>
-      Bedrijfsvoorheffing: -${eur(bv)} · vermindering overuren: +${eur(otTaxRelief)}<br>
-      Vakantiegeldreserve: ${eur(holidayGross)} · geschat netto: ${eur(holidayNet)}</div>`;
-  } else if(profile==='bediende'){
-    const monthlyGross=num('bediendeMonthlyGross')||gross;
-    const hRate=holidayBVRate2026(monthlyGross*12);
-    extraLines=`<div class="profile-info"><b>Bediende — fiscale/vakantie-opbouw</b><br>
-      Werkbonus: +${eur(workBonus)} · Bedrijfsvoorheffing: -${eur(bv)}<br>
-      Dubbel vakantiegeld: ${eur(holidayGross)} · RSZ: -${eur(holidayRSZ)} · BV vakantiegeld: ${hRate.toFixed(2)}% (${eur(holidayBV)})<br>
-      Geschat netto vakantiegeld: ${eur(holidayNet)}</div>`;
+  if(profile==='student650low'){
+    html=`<div class="result-build">
+      <div class="build-section"><div class="build-section-title">Bruto loon</div>
+        ${hoursRow('Werken',reg,rate,base)}
+        ${hoursRow('Pauze betaald',breaks,rate,breakPay)}
+        ${hoursRow('Overuren 150%',ot150h,o150,v150)}
+        ${hoursRow('Overuren 200%',ot200h,o200,v200)}
+        ${hoursRow('Zondagpremie',sunH,sunRate,sunday)}
+        ${row('Bruto',gross,'total')}
+      </div>
+      <div class="build-section"><div class="build-section-title">Inhoudingen & netto vergoedingen</div>
+        ${row('Bruto RSZ',gross)}
+        ${row('Solidariteitsbijdrage student',-employeeRSZ,'negative')}
+        ${row('Belastbaar loon',taxable,'total')}
+        ${row('Kledijvergoeding',cloth,'positive')}
+        ${row('Onkosten',expenses,'positive')}
+        ${row('Netto premies / dagvergoeding',dayAllowanceTotal,'positive')}
+        ${row('Netto loon',net,'total')}
+      </div>
+    </div>`;
+  } else if(profile==='extra'){
+    html=`<div class="result-build">
+      <div class="build-section"><div class="build-section-title">Bruto loon</div>
+        ${hoursRow('Werken',reg,rate,base)}
+        ${hoursRow('Pauze betaald',breaks,rate,breakPay)}
+        ${hoursRow('Overuren 150%',ot150h,o150,v150)}
+        ${hoursRow('Overuren 200%',ot200h,o200,v200)}
+        ${hoursRow('Zondagpremie',sunH,sunRate,sunday)}
+        ${row('Bruto',gross,'total')}
+      </div>
+      <div class="build-section"><div class="build-section-title">Sociale bijdragen & belastingen</div>
+        ${row('RSZ-forfait',rszBase)}
+        ${row('Werknemersbijdrage RSZ',-employeeRSZ,'negative')}
+        ${row('Werkbonus',workBonus,'positive')}
+        ${row('Belastbaar loon',taxable,'total')}
+        ${row('Bedrijfsvoorheffing',-bv,'negative')}
+        ${row('Vermindering overuren',otTaxRelief,'positive')}
+      </div>
+      <div class="build-section"><div class="build-section-title">Netto vergoedingen</div>
+        ${row('Kledijvergoeding',cloth,'positive')}
+        ${row('Dagvergoeding / netto premies',dayAllowanceTotal,'positive')}
+        ${row('Sociaal abonnement / netto voordeel',subscription,'positive')}
+        ${row('Kosten eigen werkgever',employerCosts,'positive')}
+      </div>
+      <div class="build-section"><div class="build-section-title">Vakantiegeld reserve</div>
+        ${row('Bruto reserve',holidayGross)}
+        ${row('RSZ vakantiegeld',-holidayRSZ,'negative')}
+        ${row('Belastbaar vakantiegeld',holidayTaxable,'total')}
+        ${row('BV vakantiegeld',-holidayBV,'negative')}
+        ${row('Netto vakantiegeld',holidayNet,'positive total')}
+        <div class="build-note">Reserve: ${holidayRateUsed.toFixed(2)}% van het bruto loon. Dit bedrag wordt apart getoond en is niet in het gewone netto loon hierboven opgenomen.</div>
+      </div>
+      <div class="build-section" style="grid-column:1/-1"><div class="build-section-title">Fiscale samenvatting</div>
+        ${row('Bruto loon',gross)}
+        ${row('RSZ',-employeeRSZ,'negative')}
+        ${row('Werkbonus',workBonus,'positive')}
+        ${row('Bedrijfsvoorheffing',-bv,'negative')}
+        ${row('Vermindering overuren',otTaxRelief,'positive')}
+        ${row('Geschat netto loon',net,'total')}
+        <div class="build-note">De bedrijfsvoorheffing is een instelbare schatting. De berekening van de Extra-pagina gebruikt de loonparameters die in Instellingen zichtbaar zijn.</div>
+      </div>
+    </div>`;
   } else {
-    extraLines=`<div class="profile-info"><b>Student</b><br>Solidariteitsbijdrage: 2,71%. Geen normale bedrijfsvoorheffing opgenomen.</div>`;
+    const monthlyGross=num('bediendeMonthlyGross')||gross;
+    html=`<div class="result-build">
+      <div class="build-section"><div class="build-section-title">Bruto loon</div>
+        ${hoursRow('Werken',reg,rate,base)}
+        ${hoursRow('Pauze betaald',breaks,rate,breakPay)}
+        ${hoursRow('Overuren 150%',ot150h,o150,v150)}
+        ${hoursRow('Overuren 200%',ot200h,o200,v200)}
+        ${hoursRow('Zondagpremie',sunH,sunRate,sunday)}
+        ${row('Bruto',gross,'total')}
+      </div>
+      <div class="build-section"><div class="build-section-title">Sociale bijdragen & belastingen</div>
+        ${row('RSZ vóór werkbonus',rszBase)}
+        ${row('Werkbonus',workBonus,'positive')}
+        ${row('Effectieve werknemers-RSZ',-employeeRSZ,'negative')}
+        ${row('Belastbaar loon',taxable,'total')}
+        ${row('Bedrijfsvoorheffing',-bv,'negative')}
+        ${row('Vermindering overuren',otTaxRelief,'positive')}
+      </div>
+      <div class="build-section"><div class="build-section-title">Netto vergoedingen</div>
+        ${row('Kledijvergoeding',cloth,'positive')}
+        ${row('Dagvergoeding / netto premies',dayAllowanceTotal,'positive')}
+        ${row('Andere netto onkosten',expenses,'positive')}
+      </div>
+      <div class="build-section"><div class="build-section-title">Dubbel vakantiegeld</div>
+        ${row('Basis bruto maandloon',monthlyGross)}
+        ${row('Dubbel vakantiegeld bruto',holidayGross)}
+        ${row('RSZ vakantiegeld',-holidayRSZ,'negative')}
+        ${row('Belastbaar vakantiegeld',holidayTaxable,'total')}
+        ${row('BV vakantiegeld ('+holidayRateUsed.toFixed(2)+'%)',-holidayBV,'negative')}
+        ${row('Netto vakantiegeld',holidayNet,'positive total')}
+        <div class="build-note">Het gemiddelde bruto maandloon in Instellingen bepaalt het vakantiegeld. Laat het op 0 staan om het huidige bruto van deze berekening te gebruiken. De Bediende-pagina is een modelberekening; er is geen Bediende-loonbrief aangeleverd om deze waarden te kalibreren.</div>
+      </div>
+      <div class="build-section" style="grid-column:1/-1"><div class="build-section-title">Fiscale samenvatting</div>
+        ${row('Bruto loon',gross)}
+        ${row('Effectieve RSZ',-employeeRSZ,'negative')}
+        ${row('Werkbonus',workBonus,'positive')}
+        ${row('Bedrijfsvoorheffing',-bv,'negative')}
+        ${row('Vermindering overuren',otTaxRelief,'positive')}
+        ${row('Geschat netto loon',net,'total')}
+        <div class="build-note">De bedrijfsvoorheffing is instelbaar. Omdat er geen Bediende-loonbrief is doorgestuurd, worden de Bediende-specifieke fiscale en vakantiegeldregels als modelberekening weergegeven.</div>
+      </div>
+    </div>`;
   }
-  document.getElementById('breakdown').innerHTML=[
-    ['Normale uren',`${reg.toFixed(2)} u × ${eur(rate)}`,base],
-    ['Betaalde pauze',`${breaks.toFixed(2)} u × ${eur(rate)}`,breakPay],
-    ['Overuren 150%',`${ot150h.toFixed(2)} u × ${eur(o150)}`,v150],
-    ['Overuren 200%',`${ot200h.toFixed(2)} u × ${eur(o200)}`,v200],
-    ['Zondagpremie',`${sunH.toFixed(2)} u × ${eur(sunRate)}`,sunday],
-    ['Bruto',``,gross],
-    [profile==='student650low'?'Solidariteitsbijdrage':'Werknemersbijdrage RSZ',``, -employeeRSZ],
-    ...(profile==='extra' ? [['Werkbonus','',workBonus],['Bedrijfsvoorheffing',`${num('extraBVRate').toFixed(2)}%`, -bv],['Vermindering overuren','',otTaxRelief],['Vakantiegeld reserve','',holidayGross]] : []),
-    ...(profile==='bediende' ? [['Werkbonus','',workBonus],['Bedrijfsvoorheffing',`${num('bediendeBVRate').toFixed(2)}%`, -bv],['Vermindering overuren','',otTaxRelief],['Dubbel vakantiegeld','',holidayGross]] : []),
-    ['Kledijvergoeding',`${clothingDays.toFixed(0)} dag(en)`,cloth],
-    ['Dagvergoeding','Buitenland',dayAllowanceTotal],
-    ['Andere netto onkosten','',expenses+subscription+employerCosts],
-    ['Geschat netto','',net]
-  ].map((x,i)=>`<div class="${i===5||i===x.length-1?'total':''}">${x[0]}</div><div class="right ${i===5||i===x.length-1?'total':''}">${eur(x[2])}</div>`).join('')+extraLines;
+  document.getElementById('resultBuild').innerHTML=html;
 
   const pn=document.getElementById('payslipNet')?.value||'',pg=document.getElementById('payslipGross')?.value||'';
   let compareHtml='';
@@ -664,11 +714,13 @@ function calc(){
 
 function saveData(){
  const ids=['rate','ot150','ot200','sunday','clothes','studentRSZ','threshold','payslipNet','payslipGross','extraBVRate','extraSubscription','extraEmployerCosts','extraHolidayRate','bediendeBVRate','bediendeMonthlyGross'];
- const data={settings:Object.fromEntries(ids.map(id=>[id,document.getElementById(id).value])),rows:[...document.querySelectorAll('#rows tr')].map(tr=>({shift:tr.querySelector('.shift').value,date:tr.querySelector('.date').value,start:tr.querySelector('.start').value,end:tr.querySelector('.end').value,work:tr.querySelector('.work').value,break:tr.querySelector('.break').value,ot150:tr.querySelector('.ot150').value,ot200:tr.querySelector('.ot200').value,sun:tr.querySelector('.sun').value,clothes:tr.querySelector('.clothes').value,days:tr.querySelector('.days').value,staydays:tr.querySelector('.staydays').value})),expenses:[...document.querySelectorAll('#expenses > div')].map(d=>({name:d.querySelector('.ename').value,amount:d.querySelector('.eamount').value}))};
+ const data={profile:currentProfile,settings:Object.fromEntries(ids.map(id=>[id,document.getElementById(id).value])),rows:[...document.querySelectorAll('#rows tr')].map(tr=>({shift:tr.querySelector('.shift').value,date:tr.querySelector('.date').value,start:tr.querySelector('.start').value,end:tr.querySelector('.end').value,work:tr.querySelector('.work').value,break:tr.querySelector('.break').value,ot150:tr.querySelector('.ot150').value,ot200:tr.querySelector('.ot200').value,sun:tr.querySelector('.sun').value,clothes:tr.querySelector('.clothes').value,days:tr.querySelector('.days').value,staydays:tr.querySelector('.staydays').value})),expenses:[...document.querySelectorAll('#expenses > div')].map(d=>({name:d.querySelector('.ename').value,amount:d.querySelector('.eamount').value}))};
  localStorage.setItem('looncontrole',JSON.stringify(data));alert('Opgeslagen in deze browser.');
 }
 function loadData(){
  const d=JSON.parse(localStorage.getItem('looncontrole')||'null');if(!d){alert('Geen opgeslagen gegevens.');return}
+ if(d.profile) currentProfile=d.profile;
+ document.querySelectorAll('.profile-tab').forEach(b=>b.classList.toggle('active',b.dataset.profile===currentProfile));
  Object.entries(d.settings||{}).forEach(([id,v])=>{if(document.getElementById(id))document.getElementById(id).value=v});
  applyProfile();
  document.getElementById('rows').innerHTML='';(d.rows||[]).forEach(addRow);document.getElementById('expenses').innerHTML='';(d.expenses||[]).forEach(addExpense);calc();
