@@ -14,10 +14,23 @@ main{max-width:1500px;margin:18px auto;padding:0 16px}.grid{display:flex;flex-di
 .formgrid{display:grid;grid-template-columns:repeat(7,minmax(120px,1fr));gap:10px}label{font-size:11px;font-weight:650;color:var(--muted);display:block;margin-bottom:5px}input,select,button{font:inherit}input,select{width:100%;padding:9px 10px;border:1px solid #cfd6df;border-radius:9px;background:#fff;color:var(--text);outline:none}input:focus,select:focus{border-color:#7aa2f7;box-shadow:0 0 0 3px #2563eb18}
 button{border:0;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:650}.primary{background:var(--accent);color:#fff}.primary:hover{background:var(--accent2)}.secondary{background:#eaf0f6;color:#172033}.danger{background:#fee4e2;color:var(--danger)}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.tablewrap{overflow-x:auto}.hours{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto}.hours th,.hours td{padding:7px 4px;border-bottom:1px solid var(--line);vertical-align:middle}.hours th{text-align:left;color:#667085;font-size:10px;font-weight:750;white-space:nowrap}.hours td{font-size:12px}.hours input,.hours select{min-width:0;padding:7px 6px;font-size:12px;border-radius:8px}.hours .shift{min-width:185px;max-width:225px}.hours .calcfield{background:#f7f9fc;font-weight:650}.hours td:last-child{width:38px}.hours .start,.hours .end{width:75px}.hours .date{width:118px}.hours .total,.hours .work{width:82px}.hours .break,.hours .ot150,.hours .ot200,.hours .sun,.hours .staydays,.hours .clothes{width:72px}.hours .days{width:90px}
-.resultbar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.kpi{background:linear-gradient(180deg,#f8fafc,#f4f7fb);border:1px solid var(--line);border-radius:12px;padding:13px 14px}.kpi .v{font-size:22px;font-weight:800;letter-spacing:-.02em}.kpi .l{font-size:11px;color:var(--muted);margin-top:2px}.breakdown{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:10px}.breakdown>div{padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}.breakdown .right{text-align:left;font-size:14px;font-weight:750;border-top:0}.breakdown .total{background:#eef4ff;border-color:#c9dafd}.right{text-align:right}.total{font-size:15px;font-weight:800}.comparebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.note{display:none}.hidden-setting{display:none!important}.hidden-col{display:none!important}.tag{display:inline-block;border-radius:99px;padding:3px 7px;background:#eff6ff;color:#1d4ed8;font-size:10px}
+.resultbar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.kpi{background:linear-gradient(180deg,#f8fafc,#f4f7fb);border:1px solid var(--line);border-radius:12px;padding:13px 14px}.kpi .v{font-size:22px;font-weight:800;letter-spacing:-.02em}.kpi .l{font-size:11px;color:var(--muted);margin-top:2px}.breakdown{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:10px}.breakdown>div{padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}.breakdown .right{text-align:left;font-size:14px;font-weight:750;border-top:0}.breakdown .total{background:#eef4ff;border-color:#c9dafd}.right{text-align:right}.total{font-size:15px;font-weight:800}.comparebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.result-columns{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:10px}
+.result-column{display:flex;flex-direction:column}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.result-row span{font-size:14px;color:var(--text)}
+.result-row strong{font-size:15px;font-weight:750}
+.big-results{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.big-result{border-radius:16px;padding:22px;border:1px solid var(--line);background:#f8fafc}
+.big-result span{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.03em}
+.big-result strong{display:block;font-size:30px;font-weight:850;line-height:1.1}
+.gross-result{background:#f8fafc}
+.net-result{background:#ecfdf3;border-color:#abefc6}
+.net-result span,.net-result strong{color:#087443}
+.net-result strong{font-size:34px}.note{display:none}.hidden-setting{display:none!important}.hidden-col{display:none!important}.tag{display:inline-block;border-radius:99px;padding:3px 7px;background:#eff6ff;color:#1d4ed8;font-size:10px}
 @media(max-width:1250px){.formgrid{grid-template-columns:repeat(4,minmax(130px,1fr))}.breakdown{grid-template-columns:repeat(3,minmax(150px,1fr))}}
 @media(max-width:900px){main{padding:0 10px}.card{padding:14px}.formgrid{grid-template-columns:repeat(2,minmax(130px,1fr))}.resultbar{grid-template-columns:repeat(2,1fr)}.breakdown{grid-template-columns:repeat(2,minmax(140px,1fr))}.tablewrap{overflow-x:auto}.hours{min-width:1180px}}
-@media(max-width:600px){.formgrid,.resultbar,.breakdown,.comparebar{grid-template-columns:1fr}.hours{min-width:1180px}}
+@media(max-width:600px){.formgrid,.resultbar,.breakdown,.comparebar,.result-columns,.big-results{grid-template-columns:1fr}.hours{min-width:1180px}}
 </style>
 </head>
 <body>
@@ -71,7 +84,31 @@ button{border:0;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:65
 <div class="kpi"><div class="v" id="totalHours">0,00 u</div><div class="l">Totaal betaalde uren</div></div>
 <div class="kpi"><div class="v" id="overtime">0,00 u</div><div class="l">Overuren</div></div>
 </div>
-<h3>Loonopbouw</h3><div class="breakdown" id="breakdown"></div>
+<h3>Loonopbouw</h3>
+<div class="result-columns">
+  <div class="result-column">
+    <div class="result-row"><span>Werken</span><strong id="resultWork">€ 0,00</strong></div>
+    <div class="result-row"><span>Pauze betaald</span><strong id="resultBreak">€ 0,00</strong></div>
+    <div class="result-row"><span>Overuren</span><strong id="resultOvertimeMoney">€ 0,00</strong></div>
+    <div class="result-row"><span>Zondagpremie</span><strong id="resultSunday">€ 0,00</strong></div>
+  </div>
+  <div class="result-column">
+    <div class="result-row"><span>Solidariteitsbijdrage</span><strong id="resultRSZ">€ 0,00</strong></div>
+    <div class="result-row"><span>Kledijvergoeding</span><strong id="resultClothes">€ 0,00</strong></div>
+    <div class="result-row"><span>Onkosten</span><strong id="resultExpenses">€ 0,00</strong></div>
+    <div class="result-row"><span>Netto premies</span><strong id="resultPremiums">€ 0,00</strong></div>
+  </div>
+</div>
+<div class="big-results">
+  <div class="big-result gross-result">
+    <span>Bruto RSZ</span>
+    <strong id="resultGross">€ 0,00</strong>
+  </div>
+  <div class="big-result net-result">
+    <span>Netto Loon</span>
+    <strong id="resultNet">€ 0,00</strong>
+  </div>
+</div>
 <h3>Vergelijking</h3>
 <div class="formgrid">
 <div><label>Netto volgens loonbrief (€)</label><input id="payslipNet" type="number" step=".01" placeholder="bv. 654.55"></div>
@@ -331,19 +368,16 @@ function calc(){
  const daysNet=dayAllowanceTotal;
  const net=gross-student+cloth+daysNet+expenses;
  document.getElementById('gross').textContent=eur(gross);document.getElementById('net').textContent=eur(net);document.getElementById('totalHours').textContent=work.toFixed(2)+' u';document.getElementById('overtime').textContent=(ot150h+ot200h).toFixed(2)+' u';
- document.getElementById('breakdown').innerHTML=[
- ['Normale uren',`${reg.toFixed(2)} u × ${eur(rate)}`,base],
- ['Betaalde pauze',`${breaks.toFixed(2)} u × ${eur(rate)}`,breakPay],
- ['Overuren 150%',`${ot150h.toFixed(2)} u × ${eur(o150)}`,v150],
- ['Overuren 200%',`${ot200h.toFixed(2)} u × ${eur(o200)}`,v200],
- ['Zondagpremie',`${sunH.toFixed(2)} u × ${eur(sunRate)}`,sunday],
-  ['Bruto',``,gross],
- ['Sociale Bijdrage',`${(rsz*100).toFixed(2)}%`,-student],
- ['Kledijvergoeding',`${clothingDays.toFixed(0)} dag(en)`,cloth],
- ['Dagvergoeding',`${document.querySelectorAll('#rows tr').length} rit(ten) — €25 of €50 per rit`,daysNet],
- ['Andere netto onkosten',``,expenses],
- ['Geschat netto',``,net]
- ].map((x,i)=>`<div class="${i===6||i===11?'total':''}">${x[0]}</div><div class="right ${i===6||i===11?'total':''}">${eur(x[2])}</div>`).join('');
+ document.getElementById('resultWork').textContent=eur(base);
+ document.getElementById('resultBreak').textContent=eur(breakPay);
+ document.getElementById('resultOvertimeMoney').textContent=eur(v150+v200);
+ document.getElementById('resultSunday').textContent=eur(sunday);
+ document.getElementById('resultRSZ').textContent=eur(-student);
+ document.getElementById('resultClothes').textContent=eur(cloth);
+ document.getElementById('resultExpenses').textContent=eur(expenses);
+ document.getElementById('resultPremiums').textContent=eur(0);
+ document.getElementById('resultGross').textContent=eur(gross);
+ document.getElementById('resultNet').textContent=eur(net);
  const pn=document.getElementById('payslipNet').value,pg=document.getElementById('payslipGross').value;
  document.getElementById('compare').innerHTML=(pn?`<div>Verschil netto</div><div class="right">${eur(net-Number(pn))}</div>`:'')+(pg?`<div>Verschil bruto</div><div class="right">${eur(gross-Number(pg))}</div>`:'');
 }
