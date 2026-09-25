@@ -50,7 +50,7 @@ button{border:0;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:65
 <div class="hidden-setting"><label>Overuren 200% (€ / uur)</label><input id="ot200" type="number" step=".0001" value="31.94"></div>
 <div class="hidden-setting"><label>Zondagpremie (€ / uur)</label><input id="sunday" type="number" step=".01" value="2.00"></div>
 <div class="hidden-setting"><label>Kledijvergoeding (€ / dag)</label><input id="clothes" type="number" step=".01" value="2.20"></div>
-<div><label>Sociale bijdrage (%)</label><input id="studentRSZ" type="number" step=".01" value="2.71" readonly></div>
+<div><label for="studentRSZ">Sociale bijdrage (%)</label><input id="studentRSZ" type="number" step=".01" value="2.71" readonly></div>
 <div class="hidden-setting"><label>Overuren vanaf (werkuren)</label><input id="threshold" type="number" step=".01" value="11"></div>
 </div>
 
@@ -130,14 +130,24 @@ const PROFILES={
 function applyProfile(){
  const profile=document.getElementById('profile').value;
  const p=PROFILES[profile]; if(!p)return;
+
  document.getElementById('rate').value=p.rate;
  document.getElementById('ot150').value=p.ot150;
  document.getElementById('ot200').value=p.ot200;
  document.getElementById('sunday').value=p.sunday;
  document.getElementById('clothes').value=p.clothes;
- // RSZ is always determined by the selected status:
- // Student = 2.71%, Extra/Bediende = 13.07%.
- document.getElementById('studentRSZ').value=(profile==='student650low' ? 2.71 : 13.07).toFixed(2);
+
+ // RSZ volgt altijd het gekozen statuut:
+ // Student = 2,71% solidariteitsbijdrage
+ // Extra/Bediende = 13,07% normale sociale bijdrage
+ const rsz = profile === 'student650low' ? 2.71 : 13.07;
+ document.getElementById('studentRSZ').value = rsz.toFixed(2);
+
+ const rszLabel=document.querySelector('label[for="studentRSZ"]');
+ if(rszLabel) rszLabel.textContent = profile === 'student650low'
+   ? 'Solidariteitsbijdrage (%)'
+   : 'Sociale bijdrage (%)';
+
  document.getElementById('threshold').value=p.threshold;
  calc();
 }
@@ -458,7 +468,7 @@ function calc(){
  ['Andere netto onkosten',``,expenses],
  ['Geschat netto',``,net]
  ].map((x,i)=>`<div class="${i===6||i===11?'total':''}">${x[0]}</div><div class="right ${i===6||i===11?'total':''}">${eur(x[2])}</div>`).join('');
- const pn=document.getElementById('payslipNet').value,pg=document.getElementById('payslipGross').value;
+ const pn=document.getElementById('payslipNet')?.value||'',pg=document.getElementById('payslipGross')?.value||'';
  document.getElementById('compare').innerHTML=(pn?`<div>Verschil netto</div><div class="right">${eur(net-Number(pn))}</div>`:'')+(pg?`<div>Verschil bruto</div><div class="right">${eur(gross-Number(pg))}</div>`:'');
 }
 function saveData(){
