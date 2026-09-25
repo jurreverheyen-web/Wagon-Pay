@@ -51,7 +51,7 @@ button{border:0;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:65
 <div class="hidden-setting"><label>Overuren 200% (€ / uur)</label><input id="ot200" type="number" step=".0001" value="31.94"></div>
 <div class="hidden-setting"><label>Zondagpremie (€ / uur)</label><input id="sunday" type="number" step=".01" value="2.00"></div>
 <div class="hidden-setting"><label>Kledijvergoeding (€ / dag)</label><input id="clothes" type="number" step=".01" value="2.20"></div>
-<div><label>Sociale bijdrage (%)</label><input id="studentRSZ" type="number" step=".01" value="13.07"></div>
+<div><label>Sociale bijdrage (%)</label><input id="studentRSZ" type="number" step=".01" value="2.71"><small style="display:block;margin-top:5px;color:var(--muted)">Bij statuut Student wordt standaard de verminderde solidariteitsbijdrage van 2,71% gebruikt.</small></div>
 <div class="hidden-setting"><label>Overuren vanaf (werkuren)</label><input id="threshold" type="number" step=".01" value="11"></div>
 </div>
 
@@ -247,6 +247,9 @@ function destinationForShift(id){
 function isOutbound(id){return ['es475-brussel-berlijn','es475-brussel-parijs','es452-brussel-praag','es452-denderleeuw-dresden','es400-denderleeuw-bellinzona','es400-goschenen-milaan'].includes(id)}
 function isReturn(id){return ['es474-berlijn-brussel','es474-parijs-brussel','es453-praag-brussel','es453-dresden-denderleeuw','es401-bellinzona-denderleeuw'].includes(id)}
 function recalcDayAllowances(){
+ // Netto buitenlandse premie: €25 per buitenlandse dag, of €50 wanneer er een nachtstop/overnachting is.
+ // De premie is per buitenlandse opdracht/verblijf, NIET per afzonderlijke shift.
+ // Enkel een heenrit of enkel een terugrit = standaard €25.
  const rows=[...document.querySelectorAll('#rows tr')];
  rows.forEach(tr=>{tr.querySelector('.days').value='0';tr.querySelector('.staydays').value='';});
  const used=new Set();
@@ -256,22 +259,78 @@ function recalcDayAllowances(){
    const date=tr.querySelector('.date').value;
    if(dest&&date) (groups[dest]??=[]).push({tr,i,date,id:tr.querySelector('.shift').value});
  });
+
  Object.entries(groups).forEach(([dest,list])=>{
    const outs=list.filter(x=>isOutbound(x.id)).sort((a,b)=>a.date.localeCompare(b.date));
    const rets=list.filter(x=>isReturn(x.id)).sort((a,b)=>a.date.localeCompare(b.date));
+
    outs.forEach(o=>{
-     const s=shiftById(o.id); const overnightRide=minutes(s.end)<=minutes(s.start); const arrival=addDays(parseDateLocal(o.date), overnightRide?1:0);
-     // Match the nearest return on/after arrival, within 3 calendar days.
+     const s=shiftById(o.id);
+     const overnightRide=s ? minutes(s.end)<=minutes(s.start) : false;
+     const arrival=addDays(parseDateLocal(o.date), overnightRide?1:0);
      const r=rets.find(r=>!used.has(r.i) && dayDiff(arrival,parseDateLocal(r.date))>=0 && dayDiff(arrival,parseDateLocal(r.date))<=3);
-     let stay=1;
-     if(r){ stay=Math.min(2,Math.max(1,dayDiff(arrival,parseDateLocal(r.date))+1)); used.add(r.i); }
-     o.tr.querySelector('.staydays').value=stay; o.tr.querySelector('.days').value=(stay*25).toFixed(2);
+
+     // Zelfde buitenlandse verblijf: €25. Als de terugrit pas de volgende
+     // kalenderdag (of later) plaatsvindt, is er een nachtstop: €50.
+     const overnight = overnightRide || (r && dayDiff(parseDateLocal(o.date),parseDateLocal(r.date))>=1);
+     const premium = overnight ? 50 : 25;
+
+     o.tr.querySelector('.staydays').value=overnight?'2':'1';
+     o.tr.querySelector('.days').value=premium.toFixed(2);
      used.add(o.i);
+     if(r){
+       r.tr.querySelector('.staydays').value=overnight?'2':'1';
+       r.tr.querySelector('.days').value='0.00';
+       used.add(r.i);
+     }
    });
-   list.filter(x=>isReturn(x.id) && !used.has(x.i)).forEach(r=>{r.tr.querySelector('.staydays').value='1';r.tr.querySelector('.days').value='25.00';used.add(r.i);});
-   // Any destination row not classed as a return/outbound still gets one day.
-   list.filter(x=>!used.has(x.i)).forEach(x=>{x.tr.querySelector('.staydays').value='1';x.tr.querySelector('.days').value='25.00';used.add(x.i);});
+
+   // Een losse terugrit zonder gekoppelde heenrit krijgt zelf €25.
+   list.filter(x=>isReturn(x.id) && !used.has(x.i)).forEach(r=>{
+     r.tr.querySelector('.staydays').value='1';
+     r.tr.querySelector('.days').value='25.00';
+     used.add(r.i);
+   });
+
+   // Elke andere buitenlandse shift zonder gekoppelde heen/terugrit is één buitenlandse opdracht = €25.
+   list.filter(x=>!used.has(x.i)).forEach(x=>{
+     x.tr.querySelector('.staydays').value='1';
+     x.tr.querySelector('.days').value='25.00';
+     used.add(x.i);
+   });
  });
+
+ // Speciale ES400/401-cyclus Brussel–Milaan–Brussel: deze kan uit meerdere
+ // shifts bestaan, maar blijft één buitenlandse opdracht. Zonder nachtstop €25,
+ // met een nachtstop €50.
+ const milanRows=rows.map((tr,i)=>({tr,i,date:tr.querySelector('.date').value,id:tr.querySelector('.shift').value}))
+   .filter(x=>x.date && ['es400-brussels-keulen','es400-goschenen-milaan','es401-koblenz-brussel'].includes(x.id))
+   .sort((a,b)=>a.date.localeCompare(b.date));
+ if(milanRows.length>=2){
+   // Een datumverschil op zich betekent nog geen nachtstop: de nachttrein
+   // kan gewoon over middernacht rijden. We tellen daarom alleen €50 wanneer
+   // er tussen opeenvolgende shifts een echte onderbreking van minstens 6 uur zit.
+   const toDateTime=(date,time)=>{
+     const d=parseDateLocal(date);
+     const mins=minutes(time);
+     d.setHours(0,0,0,0);
+     d.setMinutes(mins);
+     return d;
+   };
+   let overnight=false;
+   for(let i=1;i<milanRows.length;i++){
+     const prev=milanRows[i-1].tr;
+     const cur=milanRows[i].tr;
+     const prevEnd=toDateTime(milanRows[i-1].date,prev.querySelector('.end').value);
+     let curStart=toDateTime(milanRows[i].date,cur.querySelector('.start').value);
+     while(curStart<=prevEnd) curStart=addDays(curStart,1);
+     if((curStart-prevEnd)/3600000>=6){overnight=true;break;}
+   }
+   const premium=overnight?50:25;
+   milanRows.forEach(x=>{x.tr.querySelector('.days').value='0.00';x.tr.querySelector('.staydays').value='';});
+   milanRows[0].tr.querySelector('.days').value=premium.toFixed(2);
+   milanRows[0].tr.querySelector('.staydays').value=overnight?'2':'1';
+ }
 }
 
 function applyShift(tr){
@@ -375,7 +434,7 @@ function calc(){
  document.getElementById('resultRSZ').textContent=eur(-student);
  document.getElementById('resultClothes').textContent=eur(cloth);
  document.getElementById('resultExpenses').textContent=eur(expenses);
- document.getElementById('resultPremiums').textContent=eur(0);
+ document.getElementById('resultPremiums').textContent=eur(daysNet);
  document.getElementById('resultGross').textContent=eur(gross);
  document.getElementById('resultNet').textContent=eur(net);
  const pn=document.getElementById('payslipNet').value,pg=document.getElementById('payslipGross').value;
