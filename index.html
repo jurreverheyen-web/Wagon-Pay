@@ -128,29 +128,40 @@ const PROFILES={
  bediende:{rate:15.97,ot150:23.955,ot200:31.94,sunday:2.00,clothes:2.20,rsz:13.07,threshold:11}
 };
 function applyProfile(){
- const profile=document.getElementById('profile').value;
- const p=PROFILES[profile]; if(!p)return;
+  const profile=document.getElementById('profile').value;
+  const p=PROFILES[profile];
+  if(!p)return;
 
- document.getElementById('rate').value=p.rate;
- document.getElementById('ot150').value=p.ot150;
- document.getElementById('ot200').value=p.ot200;
- document.getElementById('sunday').value=p.sunday;
- document.getElementById('clothes').value=p.clothes;
+  document.getElementById('rate').value=p.rate;
+  document.getElementById('ot150').value=p.ot150;
+  document.getElementById('ot200').value=p.ot200;
+  document.getElementById('sunday').value=p.sunday;
+  document.getElementById('clothes').value=p.clothes;
+  document.getElementById('threshold').value=p.threshold;
 
- // RSZ volgt altijd het gekozen statuut:
- // Student = 2,71% solidariteitsbijdrage
- // Extra/Bediende = 13,07% normale sociale bijdrage
- const rsz = profile === 'student650low' ? 2.71 : 13.07;
- document.getElementById('studentRSZ').value = rsz.toFixed(2);
+  // RSZ is ALWAYS determined by the selected status.
+  // Student = 2.71% solidarity contribution.
+  // Extra/Bediende = 13.07% normal social contribution.
+  const rszPercent = profile === 'student650low' ? 2.71 : 13.07;
+  const rszField=document.getElementById('studentRSZ');
+  rszField.value=rszPercent.toFixed(2);
 
- const rszLabel=document.querySelector('label[for="studentRSZ"]');
- if(rszLabel) rszLabel.textContent = profile === 'student650low'
-   ? 'Solidariteitsbijdrage (%)'
-   : 'Sociale bijdrage (%)';
+  const rszLabel=document.querySelector('label[for="studentRSZ"]');
+  if(rszLabel){
+    rszLabel.textContent = profile === 'student650low'
+      ? 'Solidariteitsbijdrage (%)'
+      : 'Sociale bijdrage (%)';
+  }
 
- document.getElementById('threshold').value=p.threshold;
- calc();
+  calc();
 }
+
+function syncRSZToProfile(){
+  const profile=document.getElementById('profile').value;
+  const percent = profile === 'student650low' ? 2.71 : 13.07;
+  document.getElementById('studentRSZ').value=percent.toFixed(2);
+}
+
 const eur=n=>new Intl.NumberFormat('nl-BE',{style:'currency',currency:'EUR'}).format(Number(n)||0);
 const num=id=>Number(document.getElementById(id).value)||0;
 
@@ -481,8 +492,16 @@ function loadData(){
  Object.entries(d.settings||{}).forEach(([id,v])=>{if(document.getElementById(id))document.getElementById(id).value=v});document.getElementById('rows').innerHTML='';(d.rows||[]).forEach(addRow);document.getElementById('expenses').innerHTML='';(d.expenses||[]).forEach(addExpense);calc();
 }
 function resetAll(){if(!confirm('Alles wissen?'))return;localStorage.removeItem('looncontrole');location.reload()}
-['rate','ot150','ot200','sunday','clothes','threshold','payslipNet','payslipGross'].forEach(id=>document.getElementById(id).addEventListener('input',calc));document.getElementById('profile').addEventListener('change',applyProfile);
-applyProfile();addRow();calc();
+['rate','ot150','ot200','sunday','clothes','threshold','payslipNet','payslipGross'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el)el.addEventListener('input',calc);
+});
+document.getElementById('profile').addEventListener('change',function(){
+  applyProfile();
+});
+applyProfile();
+addRow();
+calc();
 </script>
 </body>
 </html>
