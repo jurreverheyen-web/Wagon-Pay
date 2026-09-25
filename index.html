@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Looncontrole — PC 302</title>
+<title>Wagon Pay</title>
 <style>
 :root{--bg:#eef2f7;--card:#fff;--text:#172033;--muted:#667085;--line:#e5e7eb;--accent:#2563eb;--accent2:#1d4ed8;--danger:#b42318;--soft:#f8fafc}
 *{box-sizing:border-box}
@@ -21,7 +21,7 @@ button{border:0;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:65
 </style>
 </head>
 <body>
-<header><div class="wrap"><h1>💶 Looncontrole</h1></div></header>
+<header><div class="wrap"><h1>💶 Wagon Pay</h1></div></header>
 <main>
 <div class="grid">
 <section>
@@ -334,7 +334,7 @@ function calc(){
  ['Overuren 200%',`${ot200h.toFixed(2)} u × ${eur(o200)}`,v200],
  ['Zondagpremie',`${sunH.toFixed(2)} u × ${eur(sunRate)}`,sunday],
   ['Bruto',``,gross],
- ['Studentenbijdrage',`${(rsz*100).toFixed(2)}%`,-student],
+ ['Sociale Bijdrage',`${(rsz*100).toFixed(2)}%`,-student],
  ['Kledijvergoeding',`${clothingDays.toFixed(0)} dag(en)`,cloth],
  ['Dagvergoeding',`${document.querySelectorAll('#rows tr').length} rit(ten) — €25 of €50 per rit`,daysNet],
  ['Andere netto onkosten',``,expenses],
