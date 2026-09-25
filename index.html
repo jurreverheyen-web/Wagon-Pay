@@ -4,3133 +4,677 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Wagon Pay</title>
-
 <style>
-:root{
-  --bg:#eef2f7;
-  --card:#fff;
-  --text:#172033;
-  --muted:#667085;
-  --line:#e5e7eb;
-  --accent:#2563eb;
-  --accent2:#1d4ed8;
-  --danger:#b42318;
-  --soft:#f8fafc
-}
-
+:root{--bg:#eef2f7;--card:#fff;--text:#172033;--muted:#667085;--line:#e5e7eb;--accent:#2563eb;--accent2:#1d4ed8;--danger:#b42318;--soft:#f8fafc}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-
-body{
-  margin:0;
-  background:linear-gradient(180deg,#f3f6fb 0%,#eef2f7 100%);
-  color:var(--text);
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
-}
-
-header{
-  background:linear-gradient(135deg,#111827,#1f2937);
-  color:#fff;
-  padding:22px 20px;
-  box-shadow:0 3px 14px #10182818
-}
-
-header .wrap{max-width:1500px;margin:auto}
-
-h1{
-  margin:0;
-  font-size:26px;
-  letter-spacing:-.02em
-}
-
-header p{
-  margin:3px 0 0;
-  color:#cbd5e1;
-  font-size:13px
-}
-
-main{
-  max-width:1500px;
-  margin:18px auto;
-  padding:0 16px
-}
-
-.grid{
-  display:flex;
-  flex-direction:column;
-  gap:0
-}
-
-.card{
-  background:rgba(255,255,255,.98);
-  border:1px solid #dde3eb;
-  border-radius:16px;
-  padding:18px;
-  box-shadow:0 5px 18px #1018280a;
-  margin-bottom:16px
-}
-
-h2{
-  font-size:19px;
-  margin:0 0 14px;
-  letter-spacing:-.01em
-}
-
-h3{
-  font-size:14px;
-  margin:16px 0 8px
-}
-
-.formgrid{
-  display:grid;
-  grid-template-columns:repeat(7,minmax(120px,1fr));
-  gap:10px
-}
-
-label{
-  font-size:11px;
-  font-weight:650;
-  color:var(--muted);
-  display:block;
-  margin-bottom:5px
-}
-
-input,select,button{font:inherit}
-
-input,select{
-  width:100%;
-  padding:9px 10px;
-  border:1px solid #cfd6df;
-  border-radius:9px;
-  background:#fff;
-  color:var(--text);
-  outline:none
-}
-
-input:focus,select:focus{
-  border-color:#7aa2f7;
-  box-shadow:0 0 0 3px #2563eb18
-}
-
-button{
-  border:0;
-  border-radius:9px;
-  padding:9px 13px;
-  cursor:pointer;
-  font-weight:650
-}
-
-.primary{
-  background:var(--accent);
-  color:#fff
-}
-
-.primary:hover{background:var(--accent2)}
-
-.secondary{
-  background:#eaf0f6;
-  color:#172033
-}
-
-.danger{
-  background:#fee4e2;
-  color:var(--danger)
-}
-
-.actions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:12px
-}
-
-.tablewrap{overflow-x:auto}
-
-.hours{
-  width:100%;
-  border-collapse:separate;
-  border-spacing:0;
-  table-layout:auto
-}
-
-.hours th,.hours td{
-  padding:7px 4px;
-  border-bottom:1px solid var(--line);
-  vertical-align:middle
-}
-
-.hours th{
-  text-align:left;
-  color:#667085;
-  font-size:10px;
-  font-weight:750;
-  white-space:nowrap
-}
-
-.hours td{font-size:12px}
-
-.hours input,.hours select{
-  min-width:0;
-  padding:7px 6px;
-  font-size:12px;
-  border-radius:8px
-}
-
-.hours .shift{
-  min-width:185px;
-  max-width:225px
-}
-
-.hours .calcfield{
-  background:#f7f9fc;
-  font-weight:650
-}
-
-.hours td:last-child{width:38px}
-
-.hours .start,.hours .end{width:75px}
-.hours .date{width:118px}
-.hours .total,.hours .work{width:82px}
-.hours .break,.hours .ot150,.hours .ot200,
-.hours .sun,.hours .staydays,.hours .clothes{width:72px}
-.hours .days{width:90px}
-
-.resultbar{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-  margin-bottom:16px
-}
-
-.kpi{
-  background:linear-gradient(180deg,#f8fafc,#f4f7fb);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:13px 14px
-}
-
-.kpi .v{
-  font-size:22px;
-  font-weight:800;
-  letter-spacing:-.02em
-}
-
-.kpi .l{
-  font-size:11px;
-  color:var(--muted);
-  margin-top:2px
-}
-
-.breakdown{
-  display:grid;
-  grid-template-columns:repeat(6,minmax(130px,1fr));
-  gap:10px
-}
-
-.breakdown>div{
-  padding:11px 12px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:var(--soft)
-}
-
-.breakdown .right{
-  text-align:left;
-  font-size:14px;
-  font-weight:750;
-  border-top:0
-}
-
-.breakdown .total{
-  background:#eef4ff;
-  border-color:#c9dafd
-}
-
-.right{text-align:right}
-.total{font-size:15px;font-weight:800}
-
-.comparebar{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px
-}
-
-.hidden-setting{display:none!important}
-.hidden-col{display:none!important}
-
-.result-columns{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:24px;
-  margin-top:10px
-}
-
-.result-column{
-  display:flex;
-  flex-direction:column
-}
-
-.result-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:12px 0;
-  border-bottom:1px solid var(--line)
-}
-
-.result-row span{
-  font-size:14px;
-  color:var(--text)
-}
-
-.result-row strong{
-  font-size:15px;
-  font-weight:750
-}
-
-.big-results{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-  margin-top:22px
-}
-
-.big-result{
-  border-radius:16px;
-  padding:22px;
-  border:1px solid var(--line);
-  background:#f8fafc
-}
-
-.big-result span{
-  display:block;
-  font-size:12px;
-  font-weight:700;
-  color:var(--muted);
-  margin-bottom:8px;
-  text-transform:uppercase;
-  letter-spacing:.03em
-}
-
-.big-result strong{
-  display:block;
-  font-size:30px;
-  font-weight:850;
-  line-height:1.1
-}
-
-.net-result{
-  background:#ecfdf3;
-  border-color:#abefc6
-}
-
-.net-result span,
-.net-result strong{
-  color:#087443
-}
-
+body{margin:0;background:linear-gradient(180deg,#f3f6fb 0%,#eef2f7 100%);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:linear-gradient(135deg,#111827,#1f2937);color:#fff;padding:22px 20px;box-shadow:0 3px 14px #10182818}header .wrap{max-width:1500px;margin:auto}h1{margin:0;font-size:26px;letter-spacing:-.02em}header p{margin:3px 0 0;color:#cbd5e1;font-size:13px}
+main{max-width:1500px;margin:18px auto;padding:0 16px}.grid{display:flex;flex-direction:column;gap:0}.card{background:rgba(255,255,255,.98);border:1px solid #dde3eb;border-radius:16px;padding:18px;box-shadow:0 5px 18px #1018280a;margin-bottom:16px}h2{font-size:19px;margin:0 0 14px;letter-spacing:-.01em}h3{font-size:14px;margin:16px 0 8px}
+.formgrid{display:grid;grid-template-columns:repeat(7,minmax(120px,1fr));gap:10px}label{font-size:11px;font-weight:650;color:var(--muted);display:block;margin-bottom:5px}input,select,button{font:inherit}input,select{width:100%;padding:9px 10px;border:1px solid #cfd6df;border-radius:9px;background:#fff;color:var(--text);outline:none}input:focus,select:focus{border-color:#7aa2f7;box-shadow:0 0 0 3px #2563eb18}
+button{border:0;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:650}.primary{background:var(--accent);color:#fff}.primary:hover{background:var(--accent2)}.secondary{background:#eaf0f6;color:#172033}.danger{background:#fee4e2;color:var(--danger)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.tablewrap{overflow-x:auto}.hours{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto}.hours th,.hours td{padding:7px 4px;border-bottom:1px solid var(--line);vertical-align:middle}.hours th{text-align:left;color:#667085;font-size:10px;font-weight:750;white-space:nowrap}.hours td{font-size:12px}.hours input,.hours select{min-width:0;padding:7px 6px;font-size:12px;border-radius:8px}.hours .shift{min-width:185px;max-width:225px}.hours .calcfield{background:#f7f9fc;font-weight:650}.hours td:last-child{width:38px}.hours .start,.hours .end{width:75px}.hours .date{width:118px}.hours .total,.hours .work{width:82px}.hours .break,.hours .ot150,.hours .ot200,.hours .sun,.hours .staydays,.hours .clothes{width:72px}.hours .days{width:90px}
+.resultbar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.kpi{background:linear-gradient(180deg,#f8fafc,#f4f7fb);border:1px solid var(--line);border-radius:12px;padding:13px 14px}.kpi .v{font-size:22px;font-weight:800;letter-spacing:-.02em}.kpi .l{font-size:11px;color:var(--muted);margin-top:2px}.breakdown{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:10px}.breakdown>div{padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}.breakdown .right{text-align:left;font-size:14px;font-weight:750;border-top:0}.breakdown .total{background:#eef4ff;border-color:#c9dafd}.right{text-align:right}.total{font-size:15px;font-weight:800}.comparebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.note{display:none}.hidden-setting{display:none!important}.hidden-col{display:none!important}.tag{display:inline-block;border-radius:99px;padding:3px 7px;background:#eff6ff;color:#1d4ed8;font-size:10px}
+.result-columns{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:10px}
+.result-column{display:flex;flex-direction:column}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.result-row span{font-size:14px;color:var(--text)}
+.result-row strong{font-size:15px;font-weight:750}
+.big-results{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.big-result{border-radius:16px;padding:22px;border:1px solid var(--line);background:#f8fafc}
+.big-result span{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.03em}
+.big-result strong{display:block;font-size:30px;font-weight:850;line-height:1.1}
+.net-result{background:#ecfdf3;border-color:#abefc6}
+.net-result span,.net-result strong{color:#087443}
 .net-result strong{font-size:34px}
+@media(max-width:1250px){.formgrid{grid-template-columns:repeat(4,minmax(130px,1fr))}.breakdown{grid-template-columns:repeat(3,minmax(150px,1fr))}}
+@media(max-width:900px){main{padding:0 10px}.card{padding:14px}.formgrid{grid-template-columns:repeat(2,minmax(130px,1fr))}.resultbar{grid-template-columns:repeat(2,1fr)}.breakdown{grid-template-columns:repeat(2,minmax(140px,1fr))}.tablewrap{overflow-x:auto}.hours{min-width:1180px}}
+@media(max-width:600px){.formgrid,.resultbar,.breakdown,.comparebar,.result-columns,.big-results{grid-template-columns:1fr}.hours{min-width:1180px}}
 
-.profile-tabs{
-  display:flex;
-  gap:8px;
-  margin:0 0 16px;
-  flex-wrap:wrap
-}
-
-.profile-tab{
-  background:#eaf0f6;
-  color:#172033;
-  border:1px solid #d5dde8
-}
-
-.profile-tab.active{
-  background:#2563eb;
-  color:#fff;
-  border-color:#2563eb
-}
-
-.profile-info{
-  padding:12px 14px;
-  border:1px solid #dbe4ee;
-  border-radius:10px;
-  background:#f8fafc;
-  font-size:12px;
-  color:#475467;
-  margin-top:10px
-}
-
-.fiscal-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px
-}
-
+.profile-tabs{display:flex;gap:8px;margin:0 0 16px;flex-wrap:wrap}
+.profile-tab{background:#eaf0f6;color:#172033;border:1px solid #d5dde8}
+.profile-tab.active{background:#2563eb;color:#fff;border-color:#2563eb}
+.profile-info{padding:12px 14px;border:1px solid #dbe4ee;border-radius:10px;background:#f8fafc;font-size:12px;color:#475467;margin-top:10px}
+.fiscal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fiscal-box{padding:12px;border:1px solid var(--line);border-radius:10px;background:#f8fafc}
+.fiscal-box .label{font-size:11px;color:var(--muted);font-weight:700}
+.fiscal-box .value{font-size:18px;font-weight:800;margin-top:3px}
 .profile-only{display:none}
+.profile-page-title{font-size:24px;font-weight:850;margin:0 0 14px;color:#172033}
+.profile-page-title:after{content:"";display:block;width:46px;height:4px;border-radius:99px;background:#2563eb;margin-top:8px}
+.result-section-title{font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em;margin:14px 0 4px}
+.result-row.positive strong{color:#087443}
+.result-row.negative strong{color:#b42318}
+.fiscal-summary{margin-top:16px;padding:14px;border:1px solid #dbe4ee;border-radius:12px;background:#f8fafc}
+.fiscal-summary-title{font-size:13px;font-weight:800;margin-bottom:8px}
 
-@media(max-width:1250px){
-  .formgrid{
-    grid-template-columns:repeat(4,minmax(130px,1fr))
-  }
-
-  .breakdown{
-    grid-template-columns:repeat(3,minmax(150px,1fr))
-  }
-}
-
-@media(max-width:900px){
-  main{padding:0 10px}
-  .card{padding:14px}
-
-  .formgrid{
-    grid-template-columns:repeat(2,minmax(130px,1fr))
-  }
-
-  .resultbar{
-    grid-template-columns:repeat(2,1fr)
-  }
-
-  .breakdown{
-    grid-template-columns:repeat(2,minmax(140px,1fr))
-  }
-
-  .tablewrap{overflow-x:auto}
-  .hours{min-width:1180px}
-}
-
-@media(max-width:600px){
-  .formgrid,
-  .resultbar,
-  .breakdown,
-  .comparebar,
-  .result-columns,
-  .big-results{
-    grid-template-columns:1fr
-  }
-
-  .hours{min-width:1180px}
-}
 </style>
 </head>
-
 <body>
-
 <header style="background:#111827;padding:14px 20px;">
   <div style="max-width:1180px;margin:auto;">
-    <img src="wagon-pay-logo.png"
-         alt="Wagon Pay"
+    <img src="wagon-pay-logo.png" alt="Wagon Pay"
          style="height:42px;width:auto;display:block;">
   </div>
 </header>
-
 <main>
-
 <div class="grid">
 
 <div class="profile-tabs">
-  <button type="button"
-          class="profile-tab active"
-          data-profile="student650low"
-          onclick="switchProfilePage('student650low')">
-    Student
-  </button>
-
-  <button type="button"
-          class="profile-tab"
-          data-profile="extra"
-          onclick="switchProfilePage('extra')">
-    Extra
-  </button>
-
-  <button type="button"
-          class="profile-tab"
-          data-profile="bediende"
-          onclick="switchProfilePage('bediende')">
-    Bediende
-  </button>
+  <button type="button" class="profile-tab active" data-profile="student650low" onclick="switchProfilePage('student650low')">Student</button>
+  <button type="button" class="profile-tab" data-profile="extra" onclick="switchProfilePage('extra')">Extra</button>
+  <button type="button" class="profile-tab" data-profile="bediende" onclick="switchProfilePage('bediende')">Bediende</button>
 </div>
-
 <section>
-
+<div class="profile-page-title" id="profilePageTitle">Student loonberekening</div>
 <div class="card">
-
 <h2>1. Instellingen</h2>
-
-<div class="formgrid">
-
-<div>
-<label>Statuut</label>
-<select id="profile">
-<option value="student650low">Student</option>
-<option value="extra">Extra</option>
-<option value="bediende">Bediende</option>
-</select>
+<div class="formgrid"><div><label>Bruto uurloon (€)</label><input id="rate" type="number" step=".0001" value="15.97"></div>
+<div class="hidden-setting"><label>Overuren 150% (€ / uur)</label><input id="ot150" type="number" step=".0001" value="23.955"></div>
+<div class="hidden-setting"><label>Overuren 200% (€ / uur)</label><input id="ot200" type="number" step=".0001" value="31.94"></div>
+<div class="hidden-setting"><label>Zondagpremie (€ / uur)</label><input id="sunday" type="number" step=".01" value="2.00"></div>
+<div class="hidden-setting"><label>Kledijvergoeding (€ / dag)</label><input id="clothes" type="number" step=".01" value="2.20"></div>
+<div><label for="studentRSZ">Sociale bijdrage (%)</label><input id="studentRSZ" type="number" step=".01" value="2.71" readonly></div>
+<div class="hidden-setting"><label>Overuren vanaf (werkuren)</label><input id="threshold" type="number" step=".01" value="11"></div>
 </div>
-
-<div>
-<label>Bruto uurloon (€)</label>
-<input id="rate"
-       type="number"
-       step=".0001"
-       value="15.97">
-</div>
-
-<div class="hidden-setting">
-<label>Overuren 150% (€ / uur)</label>
-<input id="ot150"
-       type="number"
-       step=".0001"
-       value="23.955">
-</div>
-
-<div class="hidden-setting">
-<label>Overuren 200% (€ / uur)</label>
-<input id="ot200"
-       type="number"
-       step=".0001"
-       value="31.94">
-</div>
-
-<div class="hidden-setting">
-<label>Zondagpremie (€ / uur)</label>
-<input id="sunday"
-       type="number"
-       step=".01"
-       value="2.00">
-</div>
-
-<div class="hidden-setting">
-<label>Kledijvergoeding (€ / dag)</label>
-<input id="clothes"
-       type="number"
-       step=".01"
-       value="2.20">
-</div>
-
-<div>
-<label for="studentRSZ">Sociale bijdrage (%)</label>
-<input id="studentRSZ"
-       type="number"
-       step=".01"
-       value="2.71"
-       readonly>
-</div>
-
-<div class="hidden-setting">
-<label>Overuren vanaf (werkuren)</label>
-<input id="threshold"
-       type="number"
-       step=".01"
-       value="11">
-</div>
-
-</div>
-
 <div id="profileInfo" class="profile-info"></div>
-
+<div id="studentOnly" class="profile-only"></div>
 <div id="extraFiscal" class="profile-only">
-
-<div class="fiscal-grid" style="margin-top:10px">
-
-<div>
-<label>Bedrijfsvoorheffing (%)</label>
-<input id="extraBVRate"
-       type="number"
-       step=".01"
-       value="33.31">
+  <div class="fiscal-grid" style="margin-top:10px">
+    <div><label>Bedrijfsvoorheffing (%)</label><input id="extraBVRate" type="number" step=".01" value="33.31"></div>
+    <div><label>Sociaal abonnement / netto voordeel (€)</label><input id="extraSubscription" type="number" step=".01" value="0"></div>
+    <div><label>Kosten eigen werkgever (€)</label><input id="extraEmployerCosts" type="number" step=".01" value="0"></div>
+    <div><label>Vakantiegeld reserve (%)</label><input id="extraHolidayRate" type="number" step=".01" value="7.34"></div>
+  </div>
 </div>
-
-<div>
-<label>Sociaal abonnement / netto voordeel (€)</label>
-<input id="extraSubscription"
-       type="number"
-       step=".01"
-       value="0">
-</div>
-
-<div>
-<label>Kosten eigen werkgever (€)</label>
-<input id="extraEmployerCosts"
-       type="number"
-       step=".01"
-       value="0">
-</div>
-
-<div>
-<label>Vakantiegeld reserve (%)</label>
-<input id="extraHolidayRate"
-       type="number"
-       step=".01"
-       value="7.34">
-</div>
-
-</div>
-
-</div>
-
 <div id="bediendeFiscal" class="profile-only">
-
-<div class="fiscal-grid" style="margin-top:10px">
-
-<div>
-<label>Bedrijfsvoorheffing (%)</label>
-<input id="bediendeBVRate"
-       type="number"
-       step=".01"
-       value="33.31">
+  <div class="fiscal-grid" style="margin-top:10px">
+    <div><label>Bedrijfsvoorheffing (%)</label><input id="bediendeBVRate" type="number" step=".01" value="33.31"></div>
+    <div><label>Gemiddeld bruto maandloon voor vakantiegeld (€)</label><input id="bediendeMonthlyGross" type="number" step=".01" value="0"></div>
+  </div>
 </div>
-
-<div>
-<label>Gemiddeld bruto maandloon voor vakantiegeld (€)</label>
-<input id="bediendeMonthlyGross"
-       type="number"
-       step=".01"
-       value="0">
 </div>
-
-</div>
-
-</div>
-
-</div>
-
 
 <div class="card">
-
 <h2>2. Shift</h2>
 
 <div class="tablewrap">
-
-<table class="hours">
-
-<thead>
-
-<tr>
-<th>Rit</th>
-<th>Datum</th>
-<th>Van–tot</th>
-<th>Totale uren</th>
-<th>Werkuren</th>
-<th>Betaalde pauze</th>
-<th>150%</th>
-<th>200%</th>
-<th>Zondag/feestdag</th>
-<th class="hidden-col">Dagen bestemming</th>
-<th>Kledij</th>
-<th></th>
-</tr>
-
-</thead>
-
-<tbody id="rows"></tbody>
-
-</table>
-
+<table class="hours"><thead><tr><th>Rit</th><th>Datum</th><th>Van–tot</th><th>Totale uren</th><th>Werkuren</th><th>Betaalde pauze</th><th>150%</th><th>200%</th><th>Zondag/feestdag</th><th class="hidden-col">Dagen bestemming</th><th>Kledij</th><th></th></tr></thead>
+<tbody id="rows"></tbody></table>
 </div>
-
-<div class="actions">
-
-<button class="primary"
-        onclick="addRow()">
-+ Rit toevoegen
-</button>
-
-<button class="secondary"
-        onclick="addPreset()">
-Voorbeeld loonbrief
-</button>
-
+<div class="actions"><button class="primary" onclick="addRow()">+ Rit toevoegen</button><button class="secondary" onclick="addPreset()">Voorbeeld loonbrief</button></div>
 </div>
-
-</div>
-
 
 <div class="card">
-
 <h2>3. Extra vergoedingen</h2>
-
 <div id="expenses"></div>
-
-<div class="actions">
-
-<button class="secondary"
-        onclick="addExpense()">
-+ Kost toevoegen
-</button>
+<div class="actions"><button class="secondary" onclick="addExpense()">+ Kost toevoegen</button></div>
 
 </div>
-
-</div>
-
 </section>
 
-
 <aside>
-
 <div class="card">
-
 <h2>Resultaat</h2>
-
 <div class="resultbar">
-
-<div class="kpi">
-<div class="v" id="gross">€ 0,00</div>
-<div class="l">Bruto loon</div>
+<div class="kpi"><div class="v" id="gross">€ 0,00</div><div class="l">Bruto loon</div></div>
+<div class="kpi"><div class="v" id="net">€ 0,00</div><div class="l">Geschat netto</div></div>
+<div class="kpi"><div class="v" id="totalHours">0,00 u</div><div class="l">Totaal betaalde uren</div></div>
+<div class="kpi"><div class="v" id="overtime">0,00 u</div><div class="l">Overuren</div></div>
 </div>
-
-<div class="kpi">
-<div class="v" id="net">€ 0,00</div>
-<div class="l">Geschat netto</div>
-</div>
-
-<div class="kpi">
-<div class="v" id="totalHours">0,00 u</div>
-<div class="l">Totaal betaalde uren</div>
-</div>
-
-<div class="kpi">
-<div class="v" id="overtime">0,00 u</div>
-<div class="l">Overuren</div>
-</div>
-
-</div>
-
-
 <h3>Loonopbouw</h3>
-
 <div class="result-columns">
-
-<div class="result-column">
-
-<div class="result-row">
-<span>Werken</span>
-<strong id="resultWork">€ 0,00</strong>
+  <div class="result-column">
+    <div class="result-row"><span>Werken</span><strong id="resultWork">€ 0,00</strong></div>
+    <div class="result-row"><span>Pauze betaald</span><strong id="resultBreak">€ 0,00</strong></div>
+    <div class="result-row"><span>Overuren</span><strong id="resultOvertimeMoney">€ 0,00</strong></div>
+    <div class="result-row"><span>Zondagpremie</span><strong id="resultSunday">€ 0,00</strong></div>
+  </div>
+  <div class="result-column" id="resultDetails"></div>
 </div>
-
-<div class="result-row">
-<span>Pauze betaald</span>
-<strong id="resultBreak">€ 0,00</strong>
-</div>
-
-<div class="result-row">
-<span>Overuren</span>
-<strong id="resultOvertimeMoney">€ 0,00</strong>
-</div>
-
-<div class="result-row">
-<span>Zondagpremie</span>
-<strong id="resultSunday">€ 0,00</strong>
-</div>
-
-</div>
-
-
-<div class="result-column">
-
-<div class="result-row">
-<span>Sociale bijdrage</span>
-<strong id="resultRSZ">€ 0,00</strong>
-</div>
-
-<div class="result-row">
-<span>Kledijvergoeding</span>
-<strong id="resultClothes">€ 0,00</strong>
-</div>
-
-<div class="result-row">
-<span>Onkosten</span>
-<strong id="resultExpenses">€ 0,00</strong>
-</div>
-
-<div class="result-row">
-<span>Netto premies</span>
-<strong id="resultPremiums">€ 0,00</strong>
-</div>
-
-</div>
-
-</div>
-
-
 <div class="big-results">
-
-<div class="big-result gross-result">
-
-<span>Bruto RSZ</span>
-
-<strong id="resultGross">
-€ 0,00
-</strong>
-
+  <div class="big-result gross-result">
+    <span>Bruto RSZ</span>
+    <strong id="resultGross">€ 0,00</strong>
+  </div>
+  <div class="big-result net-result">
+    <span>Netto Loon</span>
+    <strong id="resultNet">€ 0,00</strong>
+  </div>
 </div>
-
-<div class="big-result net-result">
-
-<span>Netto Loon</span>
-
-<strong id="resultNet">
-€ 0,00
-</strong>
-
-</div>
-
-</div>
-
-
-<div style="display:none"
-     id="breakdown"></div>
-
-
+<div style="display:none" id="breakdown"></div>
 <h3>Vergelijking</h3>
-
 <div class="formgrid">
-
-<div>
-<label>Netto volgens loonbrief (€)</label>
-<input id="payslipNet"
-       type="number"
-       step=".01"
-       placeholder="bv. 654.55">
+<div><label>Netto volgens loonbrief (€)</label><input id="payslipNet" type="number" step=".01" placeholder="bv. 654.55"></div>
 </div>
-
-</div>
-
-<div class="breakdown"
-     id="compare"></div>
-
-
-<div class="actions">
-
-<button class="primary"
-        onclick="saveData()">
-Opslaan in browser
-</button>
-
-<button class="secondary"
-        onclick="loadData()">
-Laden
-</button>
-
-<button class="danger"
-        onclick="resetAll()">
-Alles wissen
-</button>
-
-</div>
-
+<div class="breakdown" id="compare"></div>
+<div class="actions"><button class="primary" onclick="saveData()">Opslaan in browser</button><button class="secondary" onclick="loadData()">Laden</button><button class="danger" onclick="resetAll()">Alles wissen</button></div>
 </div>
 
 </aside>
-
 </div>
-
 </main>
-
-
 <script>
-
 const PROFILES={
-
-student650low:{
-rate:15.97,
-ot150:23.955,
-ot200:31.94,
-sunday:2.00,
-clothes:2.20,
-rsz:2.71,
-threshold:11
-},
-
-extra:{
-rate:17.33,
-ot150:25.995,
-ot200:34.66,
-sunday:2.00,
-clothes:2.20,
-rsz:13.07,
-threshold:11
-},
-
-bediende:{
-rate:15.97,
-ot150:23.955,
-ot200:31.94,
-sunday:2.00,
-clothes:2.20,
-rsz:13.07,
-threshold:11
-}
-
+ student650low:{rate:15.97,ot150:23.955,ot200:31.94,sunday:2.00,clothes:2.20,rsz:2.71,threshold:11},
+ extra:{rate:17.33,ot150:25.995,ot200:34.66,sunday:2.00,clothes:2.20,rsz:13.07,threshold:11},
+ bediende:{rate:15.97,ot150:23.955,ot200:31.94,sunday:2.00,clothes:2.20,rsz:13.07,threshold:11}
 };
-
-
+let currentProfile='student650low';
 function switchProfilePage(profile){
-
-document.getElementById('profile').value=profile;
-
-document.querySelectorAll('.profile-tab')
-.forEach(b=>{
-b.classList.toggle(
-'active',
-b.dataset.profile===profile
-);
-});
-
-applyProfile();
-
+ currentProfile=profile;
+ document.querySelectorAll('.profile-tab').forEach(b=>b.classList.toggle('active',b.dataset.profile===profile));
+ applyProfile();
 }
-
 
 function updateProfileSpecificUI(profile){
-
-const info=document.getElementById('profileInfo');
-
-if(info){
-
-if(profile==='student650low'){
-
-info.textContent=
-'Student: 2,71% solidariteitsbijdrage. Geen normale RSZ en standaard geen bedrijfsvoorheffing.';
-
+ const title=document.getElementById('profilePageTitle');
+ if(title) title.textContent = profile==='student650low' ? 'Student loonberekening' : (profile==='extra' ? 'Extra loonberekening' : 'Bediende loonberekening');
+ const info=document.getElementById('profileInfo');
+ if(info){
+   if(profile==='student650low') info.textContent='Student: 2,71% solidariteitsbijdrage. Geen normale RSZ en standaard geen bedrijfsvoorheffing.';
+   else if(profile==='extra') info.textContent='Extra horeca: uurloon €17,33. RSZ wordt berekend op het horeca-forfait, niet op het volledige brutoloon.';
+   else info.textContent='Bediende: normale werknemers-RSZ van 13,07%, met werkbonus en bedrijfsvoorheffing als schatting.';
+ }
+ const ex=document.getElementById('extraFiscal');
+ const be=document.getElementById('bediendeFiscal');
+ if(ex) ex.style.display=profile==='extra'?'block':'none';
+ if(be) be.style.display=profile==='bediende'?'block':'none';
+ const student=document.getElementById('studentOnly');
+ if(student) student.style.display=profile==='student650low'?'block':'none';
 }
-
-else if(profile==='extra'){
-
-info.textContent=
-'Extra horeca: uurloon €17,33. RSZ wordt berekend op het horeca-forfait, niet op het volledige brutoloon.';
-
-}
-
-else{
-
-info.textContent=
-'Bediende: normale werknemers-RSZ van 13,07%, met werkbonus en bedrijfsvoorheffing als schatting.';
-
-}
-
-}
-
-const ex=document.getElementById('extraFiscal');
-const be=document.getElementById('bediendeFiscal');
-
-if(ex)
-ex.style.display=
-profile==='extra'?'block':'none';
-
-if(be)
-be.style.display=
-profile==='bediende'?'block':'none';
-
-}
-
-
 function applyProfile(){
+ const profile=currentProfile;
+ const p=PROFILES[profile]; if(!p)return;
 
-const profile=
-document.getElementById('profile').value;
+ document.getElementById('rate').value=p.rate;
+ document.getElementById('ot150').value=p.ot150;
+ document.getElementById('ot200').value=p.ot200;
+ document.getElementById('sunday').value=p.sunday;
+ document.getElementById('clothes').value=p.clothes;
 
-const p=PROFILES[profile];
+ // RSZ volgt altijd het gekozen statuut:
+ // Student = 2,71% solidariteitsbijdrage
+ // Extra/Bediende = 13,07% normale sociale bijdrage
+ const rsz = profile === 'student650low' ? 2.71 : 13.07;
+ document.getElementById('studentRSZ').value = rsz.toFixed(2);
 
-if(!p)return;
+ const rszLabel=document.querySelector('label[for="studentRSZ"]');
+ if(rszLabel) rszLabel.textContent = profile === 'student650low'
+   ? 'Solidariteitsbijdrage (%)'
+   : 'Sociale bijdrage (%)';
 
-document.getElementById('rate').value=p.rate;
-document.getElementById('ot150').value=p.ot150;
-document.getElementById('ot200').value=p.ot200;
-document.getElementById('sunday').value=p.sunday;
-document.getElementById('clothes').value=p.clothes;
-
-
-/*
-RSZ:
-
-Student = 2,71%
-Extra/Bediende = 13,07%
-*/
-
-const rsz=
-profile==='student650low'
-?2.71
-:13.07;
-
-document.getElementById('studentRSZ').value=
-rsz.toFixed(2);
-
-
-const rszLabel=
-document.querySelector(
-'label[for="studentRSZ"]'
-);
-
-if(rszLabel){
-
-rszLabel.textContent=
-profile==='student650low'
-?'Solidariteitsbijdrage (%)'
-:'Sociale bijdrage (%)';
-
+ document.getElementById('threshold').value=p.threshold;
+ calc();
 }
-
-document.getElementById('threshold').value=
-p.threshold;
-
-updateProfileSpecificUI(profile);
-
-calc();
-
-}
-
-
-const eur=n=>
-new Intl.NumberFormat(
-'nl-BE',
-{
-style:'currency',
-currency:'EUR'
-}
-).format(Number(n)||0);
-
-
-const num=id=>
-Number(
-document.getElementById(id).value
-)||0;
-
+const eur=n=>new Intl.NumberFormat('nl-BE',{style:'currency',currency:'EUR'}).format(Number(n)||0);
+const num=id=>Number(document.getElementById(id).value)||0;
 
 const SHIFTS=[
-
-{
-id:'es400-brussels-keulen',
-group:'ES400/401',
-name:'Brussel → Keulen',
-start:'17:17',
-end:'22:07',
-hours:4.83,
-break:0
-},
-
-{
-id:'es400-goschenen-milaan',
-group:'ES400/401',
-name:'Göschenen → Göschenen via Milaan',
-start:'08:00',
-end:'19:00',
-hours:11,
-break:0
-},
-
-{
-id:'es401-koblenz-brussel',
-group:'ES400/401',
-name:'Koblenz → Brussel',
-start:'06:00',
-end:'11:40',
-hours:5.67,
-break:0
-},
-
-{
-id:'es400-denderleeuw-bellinzona',
-group:'ES400/401',
-name:'Denderleeuw → Bellinzona',
-start:'15:45',
-end:'09:08',
-hours:12.38,
-break:5
-},
-
-{
-id:'es401-bellinzona-denderleeuw',
-group:'ES400/401',
-name:'Bellinzona → Denderleeuw',
-start:'19:23',
-end:'12:00',
-hours:11.62,
-break:5
-},
-
-{
-id:'es475-brussel-berlijn',
-group:'ES475/474',
-name:'Brussel → Berlijn',
-start:'21:40',
-end:'09:59',
-hours:12.32,
-break:5
-},
-
-{
-id:'es474-berlijn-brussel',
-group:'ES475/474',
-name:'Berlijn → Brussel',
-start:'18:30',
-end:'07:09',
-hours:12.65,
-break:5
-},
-
-{
-id:'es475-brussel-parijs',
-group:'ES475/474',
-name:'Brussel → Parijs',
-start:'07:09',
-end:'10:45',
-hours:3.60,
-break:0
-},
-
-{
-id:'es474-parijs-brussel',
-group:'ES475/474',
-name:'Parijs → Brussel',
-start:'17:45',
-end:'21:45',
-hours:4,
-break:0
-},
-
-{
-id:'es452-brussel-praag',
-group:'ES452/453',
-name:'Brussel → Praag',
-start:'19:00',
-end:'10:51',
-hours:13.85,
-break:5
-},
-
-{
-id:'es453-praag-brussel',
-group:'ES452/453',
-name:'Praag → Brussel',
-start:'18:15',
-end:'09:27',
-hours:13.20,
-break:5
-},
-
-{
-id:'es452-denderleeuw-dresden',
-group:'ES452/453',
-name:'Denderleeuw → Dresden',
-start:'17:30',
-end:'08:25',
-hours:9.92,
-break:5
-},
-
-{
-id:'es453-dresden-denderleeuw',
-group:'ES452/453',
-name:'Dresden → Denderleeuw',
-start:'20:25',
-end:'11:00',
-hours:9.58,
-break:5
-}
-
+ {id:'es400-brussels-keulen',group:'ES400/401',name:'Brussel → Keulen',start:'17:17',end:'22:07',hours:4.83,break:0},
+ {id:'es400-goschenen-milaan',group:'ES400/401',name:'Göschenen → Göschenen via Milaan',start:'08:00',end:'19:00',hours:11,break:0},
+ {id:'es401-koblenz-brussel',group:'ES400/401',name:'Koblenz → Brussel',start:'06:00',end:'11:40',hours:5.67,break:0},
+ {id:'es400-denderleeuw-bellinzona',group:'ES400/401',name:'Denderleeuw → Bellinzona',start:'15:45',end:'09:08',hours:12.38,break:5},
+ {id:'es401-bellinzona-denderleeuw',group:'ES400/401',name:'Bellinzona → Denderleeuw',start:'19:23',end:'12:00',hours:11.62,break:5},
+ {id:'es475-brussel-berlijn',group:'ES475/474',name:'Brussel → Berlijn',start:'21:40',end:'09:59',hours:12.32,break:5},
+ {id:'es474-berlijn-brussel',group:'ES475/474',name:'Berlijn → Brussel',start:'18:30',end:'07:09',hours:12.65,break:5},
+ {id:'es475-brussel-parijs',group:'ES475/474',name:'Brussel → Parijs',start:'07:09',end:'10:45',hours:3.60,break:0},
+ {id:'es474-parijs-brussel',group:'ES475/474',name:'Parijs → Brussel',start:'17:45',end:'21:45',hours:4,break:0},
+ {id:'es452-brussel-praag',group:'ES452/453',name:'Brussel → Praag',start:'19:00',end:'10:51',hours:13.85,break:5},
+ {id:'es453-praag-brussel',group:'ES452/453',name:'Praag → Brussel',start:'18:15',end:'09:27',hours:13.20,break:5},
+ {id:'es452-denderleeuw-dresden',group:'ES452/453',name:'Denderleeuw → Dresden',start:'17:30',end:'08:25',hours:9.92,break:5},
+ {id:'es453-dresden-denderleeuw',group:'ES452/453',name:'Dresden → Denderleeuw',start:'20:25',end:'11:00',hours:9.58,break:5}
 ];
 
-
-function shiftById(id){
-
-return SHIFTS.find(
-s=>s.id===id
-)||null;
-
+function shiftById(id){return SHIFTS.find(s=>s.id===id)||null}
+function minutes(t){const [h,m]=t.split(':').map(Number);return h*60+m}
+function durationMinutes(start,end){let a=minutes(start),b=minutes(end);if(b<=a)b+=1440;return b-a}
+function unusedNightMinutes(start,end){
+ let a=minutes(start), b=minutes(end); if(b<=a)b+=1440;
+ let total=0;
+ // Night window 22:00–06:00, repeated over both possible dates.
+ for(let day=0;day<=2;day++){
+   const n1=1320+day*1440,n2=1440+day*1440;
+   total+=Math.max(0,Math.min(b,n2)-Math.max(a,n1));
+   const m1=day*1440,m2=360+day*1440;
+   total+=Math.max(0,Math.min(b,m2)-Math.max(a,m1));
+ }
+ return total;
 }
-
-
-function minutes(t){
-
-const [h,m]=
-t.split(':').map(Number);
-
-return h*60+m;
-
+function dateDay(dateStr){if(!dateStr)return null;return new Date(dateStr+'T12:00:00').getDay()}
+function calendarDays(dateStr,start,end){
+ if(!dateStr)return 0;return durationMinutes(start,end)>0 && minutes(end)<=minutes(start)?2:1;
 }
-
-
-function durationMinutes(start,end){
-
-let a=minutes(start);
-let b=minutes(end);
-
-if(b<=a)b+=1440;
-
-return b-a;
-
+function sundayHours(dateStr,start,end,workHours){
+ if(!dateStr || !start || !end || workHours<=0)return 0;
+ return premiumHours(dateStr,start,end,workHours);
 }
-
-
-function dateDay(dateStr){
-
-if(!dateStr)return null;
-
-return new Date(
-dateStr+'T12:00:00'
-).getDay();
-
-}
-
 
 function shiftOptions(selected){
-
-let html=
-'<option value="">— Kies een rit —</option>';
-
-const groups={};
-
-SHIFTS.forEach(
-s=>
-(groups[s.group]??=[]).push(s)
-);
-
-Object.entries(groups)
-.forEach(([g,list])=>{
-
-html+=
-'<optgroup label="'+g+'">';
-
-list.forEach(s=>{
-
-html+=
-`<option value="${s.id}"
-${s.id===selected?'selected':''}>
-${s.name} (${s.start}–${s.end})
-</option>`;
-
-});
-
-html+='</optgroup>';
-
-});
-
-return html;
-
+ let html='<option value="">— Kies een rit —</option>';
+ const groups={};
+ SHIFTS.forEach(s=>(groups[s.group]??=[]).push(s));
+ Object.entries(groups).forEach(([g,list])=>{
+   html+='<optgroup label="'+g+'">';
+   list.forEach(s=>html+=`<option value="${s.id}" ${s.id===selected?'selected':''}>${s.name} (${s.start}–${s.end})</option>`);
+   html+='</optgroup>';
+ });
+ return html;
 }
-
 
 function addRow(data={}){
-
-const tr=document.createElement('tr');
-
-const s=
-shiftById(data.shift)||null;
-
-const start=
-data.start??
-(s?s.start:'');
-
-const end=
-data.end??
-(s?s.end:'');
-
-const br=
-data.break??
-(s?s.break:'');
-
-const derivedWork=
-(start&&end)
-?
-Math.max(
-0,
-durationMinutes(start,end)/60-
-(Number(br)||0)
-)
-:'';
-
-const work=
-data.work??
-(
-derivedWork===''
-?(s?s.hours:'')
-:derivedWork
-);
-
-const clothesValue=
-data.clothes??
-(
-work!==''&&Number(work)>0
-?1
-:0
-);
-
-
-tr.innerHTML=`
-
-<td>
-<select class="shift">
-${shiftOptions(data.shift||'')}
-</select>
-</td>
-
-<td>
-<input class="date"
-type="date"
-value="${data.date||''}">
-</td>
-
-<td>
-<div style="display:flex;gap:5px;align-items:center">
-
-<input class="start"
-type="time"
-value="${start}">
-
-<span>–</span>
-
-<input class="end"
-type="time"
-value="${end}">
-
-</div>
-</td>
-
-<td>
-<input class="total calcfield"
-type="number"
-step=".01"
-value="${
-(start&&end)
-?(durationMinutes(start,end)/60).toFixed(2)
-:''
-}"
-placeholder="auto"
-readonly>
-</td>
-
-<td>
-<input class="work"
-type="number"
-step=".01"
-value="${work}"
-placeholder="auto">
-</td>
-
-<td>
-<input class="break"
-type="number"
-step=".01"
-value="${br}"
-placeholder="0">
-</td>
-
-<td>
-<input class="ot150"
-type="number"
-step=".01"
-value="${data.ot150??''}"
-placeholder="auto">
-</td>
-
-<td>
-<input class="ot200"
-type="number"
-step=".01"
-value="${data.ot200??''}"
-placeholder="auto">
-</td>
-
-<td>
-<input class="sun calcfield"
-type="number"
-step=".01"
-value="${data.sun??''}"
-placeholder="auto"
-readonly>
-</td>
-
-<td class="hidden-col">
-<input class="staydays calcfield"
-type="number"
-step="1"
-value="${data.staydays??''}"
-readonly>
-</td>
-
-<td>
-<input class="clothes"
-type="number"
-step=".01"
-value="${clothesValue}">
-</td>
-
-<td>
-<button class="danger"
-onclick="this.closest('tr').remove();calc()">
-×
-</button>
-</td>
-
-`;
-
-document.getElementById('rows')
-.appendChild(tr);
-
-
-const refresh=()=>{
-
-updateTotalAndWorkFromTimes(tr);
-
-autoPremiums(tr,true);
-
-calc();
-
-};
-
-
-tr.querySelector('.shift')
-.addEventListener(
-'change',
-()=>applyShift(tr)
-);
-
-tr.querySelector('.date')
-.addEventListener(
-'input',
-()=>{
-autoPremiums(tr,true);
-calc();
+ const tr=document.createElement('tr');
+ const s=shiftById(data.shift)||null;
+ const start=data.start??(s?s.start:'');
+ const end=data.end??(s?s.end:'');
+ const br=data.break??(s?s.break:'');
+ const derivedWork=(start&&end)?Math.max(0,durationMinutes(start,end)/60-(Number(br)||0)):'';
+ const work=data.work??(derivedWork===''?(s?s.hours:''):derivedWork);
+ const clothesValue=data.clothes??((work!=='' && Number(work)>0)?1:0);
+ tr.innerHTML=`
+ <td><select class="shift">${shiftOptions(data.shift||'')}</select></td>
+ <td><input class="date" type="date" value="${data.date||''}"></td>
+ <td><div style="display:flex;gap:5px;align-items:center"><input class="start" type="time" value="${start}"><span>–</span><input class="end" type="time" value="${end}"></div></td>
+ <td><input class="total calcfield" type="number" step=".01" value="${(start&&end)?(durationMinutes(start,end)/60).toFixed(2):''}" placeholder="auto" readonly></td>
+ <td><input class="work" type="number" step=".01" value="${work}" placeholder="auto"></td>
+ <td><input class="break" type="number" step=".01" value="${br}" placeholder="0"></td>
+ <td><input class="ot150" type="number" step=".01" value="${data.ot150??''}" placeholder="auto"></td>
+ <td><input class="ot200" type="number" step=".01" value="${data.ot200??''}" placeholder="auto"></td>
+ <td><input class="sun calcfield" type="number" step=".01" value="${data.sun??''}" placeholder="auto" readonly></td>
+ <td class="hidden-col"><input class="staydays calcfield" type="number" step="1" value="${data.staydays??''}" placeholder="auto" readonly></td>
+ <td><input class="clothes" type="number" step=".01" value="${clothesValue}"></td>
+ <td class="hidden-col"><input class="days calcfield" type="number" step=".01" value="${data.days??0}" placeholder="auto" readonly></td>
+ <td><button class="danger" onclick="this.closest('tr').remove();calc()">×</button></td>`;
+ document.getElementById('rows').appendChild(tr);
+ const refresh=()=>{updateTotalAndWorkFromTimes(tr);autoPremiums(tr,true);calc()};
+ tr.querySelector('.shift').addEventListener('change',()=>applyShift(tr));
+ tr.querySelector('.date').addEventListener('input',()=>{autoPremiums(tr,true);calc()});
+ tr.querySelector('.start').addEventListener('input',refresh);
+ tr.querySelector('.end').addEventListener('input',refresh);
+ tr.querySelector('.break').addEventListener('input',refresh);
+ tr.querySelector('.work').addEventListener('input',()=>{autoPremiums(tr,true);calc()});
+ tr.querySelectorAll('.ot150,.ot200,.sun,.clothes').forEach(x=>x.addEventListener('input',calc));
+ 
+ autoPremiums(tr,true);calc();
 }
-);
-
-tr.querySelector('.start')
-.addEventListener(
-'input',
-refresh
-);
-
-tr.querySelector('.end')
-.addEventListener(
-'input',
-refresh
-);
-
-tr.querySelector('.break')
-.addEventListener(
-'input',
-refresh
-);
-
-tr.querySelector('.work')
-.addEventListener(
-'input',
-()=>{
-autoPremiums(tr,true);
-calc();
-}
-);
-
-tr.querySelectorAll(
-'.ot150,.ot200,.sun,.clothes'
-).forEach(
-x=>x.addEventListener(
-'input',
-calc
-)
-);
-
-autoPremiums(tr,true);
-
-calc();
-
-}
-
-
 function updateTotalAndWorkFromTimes(tr){
-
-const start=
-tr.querySelector('.start').value;
-
-const end=
-tr.querySelector('.end').value;
-
-if(!start||!end)return;
-
-const total=
-durationMinutes(start,end)/60;
-
-const br=
-Math.max(
-0,
-Number(
-tr.querySelector('.break').value
-)||0
-);
-
-const worked=
-Math.max(
-0,
-total-br
-);
-
-tr.querySelector('.total').value=
-total.toFixed(2);
-
-tr.querySelector('.work').value=
-worked.toFixed(2);
-
+ const start=tr.querySelector('.start').value,end=tr.querySelector('.end').value;
+ if(!start||!end)return;
+ const total=durationMinutes(start,end)/60;
+ const br=Math.max(0,Number(tr.querySelector('.break').value)||0);
+ const worked=Math.max(0,total-br);
+ tr.querySelector('.total').value=total.toFixed(2);
+ tr.querySelector('.work').value=worked.toFixed(2);
+}
+function updateDayAllowance(tr){
+  // Per-verblijf berekening gebeurt centraal in recalcDayAllowances().
 }
 
-
-function parseDateLocal(s){
-
-return s
-?new Date(s+'T12:00:00')
-:null;
-
-}
-
-
-function addDays(d,n){
-
-const x=new Date(d);
-
-x.setDate(
-x.getDate()+n
-);
-
-return x;
-
-}
-
-
-function dayDiff(a,b){
-
-return Math.round(
-(b-a)/86400000
-);
-
-}
-
-
+function parseDateLocal(s){return s?new Date(s+'T12:00:00'):null}
+function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
+function dayDiff(a,b){return Math.round((b-a)/86400000)}
 function destinationForShift(id){
-
-const map={
-
-'es475-brussel-berlijn':'Berlijn',
-'es474-berlijn-brussel':'Berlijn',
-
-'es475-brussel-parijs':'Parijs',
-'es474-parijs-brussel':'Parijs',
-
-'es452-brussel-praag':'Praag',
-'es453-praag-brussel':'Praag',
-
-'es452-denderleeuw-dresden':'Dresden',
-'es453-dresden-denderleeuw':'Dresden',
-
-'es400-denderleeuw-bellinzona':'Bellinzona',
-'es401-bellinzona-denderleeuw':'Bellinzona',
-
-'es400-goschenen-milaan':'Milaan'
-
-};
-
-return map[id]||null;
-
+ const map={
+  'es475-brussel-berlijn':'Berlijn','es474-berlijn-brussel':'Berlijn',
+  'es475-brussel-parijs':'Parijs','es474-parijs-brussel':'Parijs',
+  'es452-brussel-praag':'Praag','es453-praag-brussel':'Praag',
+  'es452-denderleeuw-dresden':'Dresden','es453-dresden-denderleeuw':'Dresden',
+  'es400-denderleeuw-bellinzona':'Bellinzona','es401-bellinzona-denderleeuw':'Bellinzona',
+  'es400-goschenen-milaan':'Milaan'
+ }; return map[id]||null;
 }
-
-
-function isOutbound(id){
-
-return [
-
-'es475-brussel-berlijn',
-'es475-brussel-parijs',
-'es452-brussel-praag',
-'es452-denderleeuw-dresden',
-'es400-denderleeuw-bellinzona',
-'es400-goschenen-milaan'
-
-].includes(id);
-
-}
-
-
-function isReturn(id){
-
-return [
-
-'es474-berlijn-brussel',
-'es474-parijs-brussel',
-'es453-praag-brussel',
-'es453-dresden-denderleeuw',
-'es401-bellinzona-denderleeuw'
-
-].includes(id);
-
-}
-
-
+function isOutbound(id){return ['es475-brussel-berlijn','es475-brussel-parijs','es452-brussel-praag','es452-denderleeuw-dresden','es400-denderleeuw-bellinzona','es400-goschenen-milaan'].includes(id)}
+function isReturn(id){return ['es474-berlijn-brussel','es474-parijs-brussel','es453-praag-brussel','es453-dresden-denderleeuw','es401-bellinzona-denderleeuw'].includes(id)}
 function recalcDayAllowances(){
+ const rows=[...document.querySelectorAll('#rows tr')];
+ rows.forEach(tr=>{
+   tr.querySelector('.days').value='0';
+   tr.querySelector('.staydays').value='';
+ });
 
-const rows=[
-...document.querySelectorAll('#rows tr')
-];
+ // A foreign assignment gets:
+ // - €25 for a single outbound OR single return
+ // - €25 for a complete assignment without an overnight stay
+ // - €50 for a complete assignment with an overnight stay
+ // Multiple shifts belonging to the same outbound/return assignment are
+ // deliberately NOT paid €25 each.
+ const groups={};
+ rows.forEach((tr,i)=>{
+   const id=tr.querySelector('.shift').value;
+   const dest=destinationForShift(id);
+   const date=tr.querySelector('.date').value;
+   if(dest && date) (groups[dest]??=[]).push({
+     tr,i,id,date,
+     start:tr.querySelector('.start').value,
+     end:tr.querySelector('.end').value
+   });
+ });
 
-rows.forEach(tr=>{
+ Object.entries(groups).forEach(([dest,list])=>{
+   const outs=list.filter(x=>isOutbound(x.id)).sort((a,b)=>a.date.localeCompare(b.date));
+   const rets=list.filter(x=>isReturn(x.id)).sort((a,b)=>a.date.localeCompare(b.date));
+   const used=new Set();
 
-tr.querySelector('.days').value='0';
-tr.querySelector('.staydays').value='';
+   // Pair each outbound with the nearest return after arrival.
+   outs.forEach(o=>{
+     if(used.has(o.i)) return;
 
-});
+     const s=shiftById(o.id);
+     const crossesMidnight=s ? minutes(s.end)<=minutes(s.start) : false;
+     const arrival=addDays(parseDateLocal(o.date),crossesMidnight?1:0);
 
+     const r=rets.find(r=>!used.has(r.i) &&
+       dayDiff(arrival,parseDateLocal(r.date))>=0 &&
+       dayDiff(arrival,parseDateLocal(r.date))<=3
+     );
 
-const groups={};
+     let allowance=25;
+     let stayDays=1;
 
-rows.forEach((tr,i)=>{
+     if(r){
+       const gap=dayDiff(arrival,parseDateLocal(r.date));
+       // Same-day return = one foreign day (€25).
+       // Return on a later calendar day = overnight stay (€50).
+       if(gap>0){
+         allowance=50;
+         stayDays=2;
+       }
+       used.add(r.i);
+     }
 
-const id=
-tr.querySelector('.shift').value;
+     o.tr.querySelector('.days').value=allowance.toFixed(2);
+     o.tr.querySelector('.staydays').value=stayDays;
+     used.add(o.i);
+   });
 
-const dest=
-destinationForShift(id);
+   // Standalone return = €25.
+   rets.forEach(r=>{
+     if(used.has(r.i)) return;
+     r.tr.querySelector('.days').value='25.00';
+     r.tr.querySelector('.staydays').value='1';
+     used.add(r.i);
+   });
 
-const date=
-tr.querySelector('.date').value;
-
-if(dest&&date){
-
-(groups[dest]??=[]).push({
-
-tr,
-i,
-id,
-date,
-
-start:
-tr.querySelector('.start').value,
-
-end:
-tr.querySelector('.end').value
-
-});
-
+   // Standalone foreign shift = €25.
+   list.forEach(x=>{
+     if(used.has(x.i)) return;
+     x.tr.querySelector('.days').value='25.00';
+     x.tr.querySelector('.staydays').value='1';
+     used.add(x.i);
+   });
+ });
 }
-
-});
-
-
-Object.entries(groups)
-.forEach(([dest,list])=>{
-
-const outs=
-list
-.filter(x=>isOutbound(x.id))
-.sort(
-(a,b)=>a.date.localeCompare(b.date)
-);
-
-const rets=
-list
-.filter(x=>isReturn(x.id))
-.sort(
-(a,b)=>a.date.localeCompare(b.date)
-);
-
-const used=new Set();
-
-
-outs.forEach(o=>{
-
-if(used.has(o.i))return;
-
-const s=
-shiftById(o.id);
-
-const crossesMidnight=
-s
-?minutes(s.end)<=minutes(s.start)
-:false;
-
-const arrival=
-addDays(
-parseDateLocal(o.date),
-crossesMidnight?1:0
-);
-
-const r=
-rets.find(
-r=>
-!used.has(r.i)&&
-dayDiff(
-arrival,
-parseDateLocal(r.date)
-)>=0&&
-dayDiff(
-arrival,
-parseDateLocal(r.date)
-)<=3
-);
-
-let allowance=25;
-let stayDays=1;
-
-if(r){
-
-const gap=
-dayDiff(
-arrival,
-parseDateLocal(r.date)
-);
-
-if(gap>0){
-
-allowance=50;
-stayDays=2;
-
-}
-
-used.add(r.i);
-
-}
-
-o.tr.querySelector('.days')
-.value=
-allowance.toFixed(2);
-
-o.tr.querySelector('.staydays')
-.value=
-stayDays;
-
-used.add(o.i);
-
-});
-
-
-rets.forEach(r=>{
-
-if(used.has(r.i))return;
-
-r.tr.querySelector('.days')
-.value='25.00';
-
-r.tr.querySelector('.staydays')
-.value='1';
-
-used.add(r.i);
-
-});
-
-
-list.forEach(x=>{
-
-if(used.has(x.i))return;
-
-x.tr.querySelector('.days')
-.value='25.00';
-
-x.tr.querySelector('.staydays')
-.value='1';
-
-used.add(x.i);
-
-});
-
-});
-
-}
-
-
 function applyShift(tr){
-
-const s=
-shiftById(
-tr.querySelector('.shift').value
-);
-
-if(!s)return;
-
-tr.querySelector('.start').value=s.start;
-tr.querySelector('.end').value=s.end;
-tr.querySelector('.break').value=s.break;
-
-updateTotalAndWorkFromTimes(tr);
-
-tr.querySelector('.ot150').value='';
-tr.querySelector('.ot200').value='';
-tr.querySelector('.sun').value='';
-tr.querySelector('.days').value='';
-tr.querySelector('.staydays').value='';
-tr.querySelector('.clothes').value=1;
-
-autoPremiums(tr,true);
-
-calc();
-
+ const s=shiftById(tr.querySelector('.shift').value);if(!s)return;
+ tr.querySelector('.start').value=s.start;tr.querySelector('.end').value=s.end;tr.querySelector('.break').value=s.break;
+ updateTotalAndWorkFromTimes(tr);
+ tr.querySelector('.ot150').value='';tr.querySelector('.ot200').value='';tr.querySelector('.sun').value='';tr.querySelector('.days').value='';tr.querySelector('.staydays').value='';tr.querySelector('.clothes').value=1;
+ autoPremiums(tr,true);calc();
 }
-
-
 function easterSunday(year){
-
-const a=year%19;
-const b=Math.floor(year/100);
-const c=year%100;
-const d=Math.floor(b/4);
-const e=b%4;
-const f=Math.floor((b+8)/25);
-const g=Math.floor((b-f+1)/3);
-const h=(19*a+b-d-g+15)%30;
-const i=Math.floor(c/4);
-const k=c%4;
-const l=(32+2*e+2*i-h-k)%7;
-const m=Math.floor((a+11*h+22*l)/451);
-
-const month=
-Math.floor(
-(h+l-7*m+114)/31
-);
-
-const day=
-((h+l-7*m+114)%31)+1;
-
-return new Date(
-Date.UTC(year,month-1,day)
-);
-
+ const a=year%19,b=Math.floor(year/100),c=year%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),month=Math.floor((h+l-7*m+114)/31),day=((h+l-7*m+114)%31)+1;
+ return new Date(Date.UTC(year,month-1,day));
 }
-
-
 function belgianHolidays(year){
-
-const easter=
-easterSunday(year);
-
-const add=days=>{
-
-const d=
-new Date(easter);
-
-d.setUTCDate(
-d.getUTCDate()+days
-);
-
-return d
-.toISOString()
-.slice(0,10);
-
-};
-
-const fixed=[
-
-`${year}-01-01`,
-`${year}-05-01`,
-`${year}-07-21`,
-`${year}-08-15`,
-`${year}-11-01`,
-`${year}-11-11`,
-`${year}-12-25`
-
-];
-
-return new Set([
-...fixed,
-add(1),
-add(39),
-add(50)
-]);
-
+ const easter=easterSunday(year);
+ const add=(days)=>{const d=new Date(easter);d.setUTCDate(d.getUTCDate()+days);return d.toISOString().slice(0,10)};
+ const fixed=[`${year}-01-01`,`${year}-05-01`,`${year}-07-21`,`${year}-08-15`,`${year}-11-01`,`${year}-11-11`,`${year}-12-25`];
+ return new Set([...fixed,add(1),add(39),add(50)]);
+}
+function isPremiumDay(dateStr){
+ if(!dateStr)return false;
+ return dateDay(dateStr)===0 || belgianHolidays(Number(dateStr.slice(0,4))).has(dateStr);
+}
+function premiumHours(dateStr,start,end,workHours){
+ if(!dateStr || workHours<=0)return 0;
+ // Sunday and public-holiday premiums are calculated independently and then added.
+ // Sunday: worked hours × €2, capped at €12 (6 premium hours).
+ // Public holiday: worked hours × €2, capped at €12 (6 premium hours).
+ // If the same date is both Sunday and a public holiday, both premiums apply.
+ const worked=Math.max(0, Number(workHours)||0);
+ const isSunday = dateDay(dateStr) === 0;
+ const isHoliday = belgianHolidays(Number(dateStr.slice(0,4))).has(dateStr);
+ const sundayHours = isSunday ? Math.min(6, worked) : 0;
+ const holidayHours = isHoliday ? Math.min(6, worked) : 0;
+ return sundayHours + holidayHours;
 }
 
-
-function premiumHours(
-dateStr,
-start,
-end,
-workHours
-){
-
-if(
-!dateStr||
-workHours<=0
-)return 0;
-
-const worked=
-Math.max(
-0,
-Number(workHours)||0
-);
-
-const isSunday=
-dateDay(dateStr)===0;
-
-const isHoliday=
-belgianHolidays(
-Number(dateStr.slice(0,4))
-).has(dateStr);
-
-const sundayHours=
-isSunday
-?Math.min(6,worked)
-:0;
-
-const holidayHours=
-isHoliday
-?Math.min(6,worked)
-:0;
-
-return sundayHours+holidayHours;
-
+function autoPremiums(tr,force=false){
+ const start=tr.querySelector('.start').value;
+ const end=tr.querySelector('.end').value;
+ const date=tr.querySelector('.date').value;
+ if(!start||!end)return;
+ const w=Number(tr.querySelector('.work').value)||0;
+ tr.querySelector('.sun').value=premiumHours(date,start,end,w).toFixed(2);
+ // Overtime is based only on effective worked hours. The paid break is
+ // already excluded from .work. Hours above the 11-hour threshold are 150%,
+ // including Sundays and public holidays. 200% is only entered manually
+ // when a payslip explicitly contains 200% hours.
+ const excess=Math.max(0,w-num('threshold'));
+ const current150=tr.querySelector('.ot150').value;
+ const current200=tr.querySelector('.ot200').value;
+ if(force || current150==='' || current200===''){
+   tr.querySelector('.ot150').value=excess.toFixed(2);
+   tr.querySelector('.ot200').value='0.00';
+ }
 }
 
-
-function autoPremiums(
-tr,
-force=false
-){
-
-const start=
-tr.querySelector('.start').value;
-
-const end=
-tr.querySelector('.end').value;
-
-const date=
-tr.querySelector('.date').value;
-
-if(!start||!end)return;
-
-const w=
-Number(
-tr.querySelector('.work').value
-)||0;
-
-tr.querySelector('.sun').value=
-premiumHours(
-date,
-start,
-end,
-w
-).toFixed(2);
-
-
-const excess=
-Math.max(
-0,
-w-num('threshold')
-);
-
-const current150=
-tr.querySelector('.ot150').value;
-
-const current200=
-tr.querySelector('.ot200').value;
-
-if(
-force||
-current150===''||
-current200===''
-){
-
-tr.querySelector('.ot150').value=
-excess.toFixed(2);
-
-tr.querySelector('.ot200').value=
-'0.00';
-
+function addExpense(data={name:'',amount:''}){
+ const d=document.createElement('div');d.style.cssText='display:grid;grid-template-columns:1fr 150px 42px;gap:8px;margin-bottom:8px';
+ d.innerHTML=`<input class="ename" placeholder="bv. sociaal abonnement / kosten eigen werkgever" value="${data.name||''}"><input class="eamount" type="number" step=".01" placeholder="€" value="${data.amount||''}"><button class="danger" onclick="this.parentElement.remove();calc()">×</button>`;
+ document.getElementById('expenses').appendChild(d);d.querySelectorAll('input').forEach(x=>x.addEventListener('input',calc));calc();
 }
-
-}
-
-
-function addExpense(
-data={name:'',amount:''}
-){
-
-const d=
-document.createElement('div');
-
-d.style.cssText=
-'display:grid;grid-template-columns:1fr 150px 42px;gap:8px;margin-bottom:8px';
-
-d.innerHTML=`
-
-<input class="ename"
-placeholder="bv. sociaal abonnement / kosten eigen werkgever"
-value="${data.name||''}">
-
-<input class="eamount"
-type="number"
-step=".01"
-placeholder="€"
-value="${data.amount||''}">
-
-<button class="danger"
-onclick="this.parentElement.remove();calc()">
-×
-</button>
-
-`;
-
-document.getElementById('expenses')
-.appendChild(d);
-
-d.querySelectorAll('input')
-.forEach(
-x=>x.addEventListener(
-'input',
-calc
-)
-);
-
-calc();
-
-}
-
-
 function addPreset(){
-
-document.getElementById('rows')
-.innerHTML='';
-
-const preset=[
-
-{
-shift:'es400-denderleeuw-bellinzona',
-date:'2026-08-03',
-ot150:6,
-clothes:1
-},
-
-{
-shift:'es400-denderleeuw-bellinzona',
-date:'2026-08-05',
-ot150:4.17,
-clothes:1
-},
-
-{
-shift:'es400-denderleeuw-bellinzona',
-date:'2026-08-07',
-ot150:3.33,
-clothes:1
-},
-
-{
-shift:'es400-denderleeuw-bellinzona',
-date:'2026-08-09',
-ot200:3.33,
-clothes:1
+ document.getElementById('rows').innerHTML='';
+ const preset=[
+  {shift:'es400-denderleeuw-bellinzona',date:'2026-08-03',ot150:6,clothes:1},
+  {shift:'es400-denderleeuw-bellinzona',date:'2026-08-05',ot150:4.17,clothes:1},
+  {shift:'es400-denderleeuw-bellinzona',date:'2026-08-07',ot150:3.33,clothes:1},
+  {shift:'es400-denderleeuw-bellinzona',date:'2026-08-09',ot200:3.33,clothes:1}
+ ];preset.forEach(addRow);
 }
-
-];
-
-preset.forEach(addRow);
-
-}
-
-
-/* Werkbonus voor bediende */
 function workBonusBediende(monthlyGross){
-
-const S=
-Math.max(
-0,
-monthlyGross
-);
-
-let A=0;
-let B=0;
-
-if(S<=2937.93)
-
-A=127.54;
-
-else if(S<=3403.62)
-
-A=
-127.54-
-0.2739*
-(S-2937.93);
-
-
-if(S<=2300.62)
-
-B=171.99;
-
-else if(S<=2937.93)
-
-B=
-171.99-
-0.2699*
-(S-2300.62);
-
-return Math.max(
-0,
-Math.min(
-S*0.1307,
-A+B
-)
-);
-
+  const S=Math.max(0,monthlyGross);
+  let A=0,B=0;
+  if(S<=2937.93) A=127.54;
+  else if(S<=3403.62) A=127.54-0.2739*(S-2937.93);
+  if(S<=2300.62) B=171.99;
+  else if(S<=2937.93) B=171.99-0.2699*(S-2300.62);
+  return Math.max(0,Math.min(S*0.1307,A+B));
 }
-
-
-/* BV-percentage vakantiegeld */
 function holidayBVRate2026(annualGross){
-
-const a=
-Math.max(
-0,
-annualGross
-);
-
-if(a<=10675)return 0;
-if(a<=13660)return 19.17;
-if(a<=17375)return 21.20;
-if(a<=20840)return 26.25;
-if(a<=23580)return 31.30;
-if(a<=26340)return 34.33;
-if(a<=31830)return 36.34;
-if(a<=34640)return 39.37;
-if(a<=45860)return 42.39;
-if(a<=59900)return 47.44;
-
-return 53.50;
-
+  const a=Math.max(0,annualGross);
+  if(a<=10675)return 0;
+  if(a<=13660)return 19.17;
+  if(a<=17375)return 21.20;
+  if(a<=20840)return 26.25;
+  if(a<=23580)return 31.30;
+  if(a<=26340)return 34.33;
+  if(a<=31830)return 36.34;
+  if(a<=34640)return 39.37;
+  if(a<=45860)return 42.39;
+  if(a<=59900)return 47.44;
+  return 53.50;
 }
-
-
-/* Horeca RSZ-forfait */
 function extraRszBase(){
-
-const byDate={};
-
-document.querySelectorAll(
-'#rows tr'
-).forEach(tr=>{
-
-const d=
-tr.querySelector('.date').value;
-
-const w=
-Number(
-tr.querySelector('.work').value
-)||0;
-
-if(d)
-byDate[d]=
-(byDate[d]||0)+w;
-
-});
-
-
-let base=0;
-
-Object.values(byDate)
-.forEach(hours=>{
-
-if(hours<=0)return;
-
-if(hours>=6)
-
-base+=69.12;
-
-else
-
-base+=Math.min(
-69.12,
-Math.ceil(hours)*11.52
-);
-
-});
-
-return base;
-
+  const byDate={};
+  document.querySelectorAll('#rows tr').forEach(tr=>{
+    const d=tr.querySelector('.date').value;
+    const w=Number(tr.querySelector('.work').value)||0;
+    if(d) byDate[d]=(byDate[d]||0)+w;
+  });
+  let base=0;
+  Object.values(byDate).forEach(hours=>{
+    if(hours<=0)return;
+    if(hours>=6) base+=69.12;
+    else base+=Math.min(69.12,Math.ceil(hours)*11.52);
+  });
+  return base;
 }
-
-
-/* HOOFDBEREKENING */
 function calc(){
+  recalcDayAllowances();
+  const profile=currentProfile;
+  const rate=num('rate'),o150=num('ot150'),o200=num('ot200'),sunRate=num('sunday'),clothes=num('clothes'),threshold=num('threshold');
+  let work=0,breaks=0,reg=0,ot150h=0,ot200h=0,sunH=0,clothingDays=0,dayAllowanceTotal=0;
+  document.querySelectorAll('#rows tr').forEach(tr=>{
+    const w=Number(tr.querySelector('.work').value)||0,b=Number(tr.querySelector('.break').value)||0;
+    const sun=Number(tr.querySelector('.sun').value)||0;
+    let a=Number(tr.querySelector('.ot150').value),z=Number(tr.querySelector('.ot200').value);
+    if(!Number.isFinite(a))a=0;if(!Number.isFinite(z))z=0;
+    const excess=Math.max(0,w-threshold);
+    if(!tr.querySelector('.ot150').value&&!tr.querySelector('.ot200').value){
+      if(dateDay(tr.querySelector('.date').value)===0){z=excess;a=0}else{a=excess;z=0}
+    }
+    const regH=Math.max(0,w-a-z);
+    work+=w;breaks+=b;reg+=regH;ot150h+=a;ot200h+=z;sunH+=sun;
+    clothingDays+=Number(tr.querySelector('.clothes').value)||0;
+    dayAllowanceTotal+=Number(tr.querySelector('.days').value)||0;
+  });
 
-recalcDayAllowances();
+  const base=reg*rate,breakPay=breaks*rate,v150=ot150h*o150,v200=ot200h*o200,sunday=sunH*sunRate,cloth=clothingDays*clothes;
+  const gross=base+breakPay+v150+v200+sunday;
+  let employeeRSZ=0,workBonus=0,taxable=gross,bv=0,otTaxRelief=0,subscription=0,employerCosts=0,holidayGross=0,holidayRSZ=0,holidayTaxable=0,holidayBV=0,holidayNet=0;
 
-const profile=
-document.getElementById('profile').value;
+  if(profile==='student650low'){
+    employeeRSZ=gross*0.0271;
+    taxable=gross-employeeRSZ;
+    // Student: no normal bedrijfsvoorheffing in this calculator.
+  } else if(profile==='extra'){
+    const rszBase=extraRszBase();
+    employeeRSZ=rszBase*0.1307;
+    // Calibrated to the supplied Extra payslip: 22 hours -> €15.19 workbonus.
+    workBonus=Math.min(employeeRSZ,127.54*(work/184.67));
+    taxable=gross-employeeRSZ+workBonus;
+    const bvRate=num('extraBVRate')/100;
+    bv=taxable*bvRate;
+    otTaxRelief=(ot150h+ot200h)*rate*0.5775;
+    subscription=num('extraSubscription');
+    employerCosts=num('extraEmployerCosts');
+    // Approximation based on the supplied Extra payslip; editable.
+    holidayGross=gross*(num('extraHolidayRate')/100);
+    const holidayDouble=holidayGross*0.4433;
+    holidayRSZ=holidayDouble*0.1307;
+    holidayTaxable=holidayGross-holidayRSZ;
+    holidayBV=holidayTaxable*bvRate;
+    holidayNet=holidayTaxable-holidayBV;
+  } else {
+    employeeRSZ=gross*0.1307;
+    workBonus=workBonusBediende(gross);
+    employeeRSZ=Math.max(0,employeeRSZ-workBonus);
+    taxable=gross-employeeRSZ;
+    const bvRate=num('bediendeBVRate')/100;
+    bv=taxable*bvRate;
+    otTaxRelief=(ot150h+ot200h)*rate*0.5775;
+    const monthlyGross=num('bediendeMonthlyGross')||gross;
+    holidayGross=monthlyGross*0.92;
+    holidayRSZ=holidayGross*0.1307;
+    holidayTaxable=holidayGross-holidayRSZ;
+    holidayBV=holidayTaxable*(holidayBVRate2026(monthlyGross*12)/100);
+    holidayNet=holidayTaxable-holidayBV;
+  }
 
-const rate=num('rate');
-const o150=num('ot150');
-const o200=num('ot200');
-const sunRate=num('sunday');
-const clothes=num('clothes');
-const threshold=num('threshold');
+  let expenses=0;
+  document.querySelectorAll('.eamount').forEach(x=>expenses+=Number(x.value)||0);
+  const net=gross-employeeRSZ+workBonus-bv+otTaxRelief+cloth+dayAllowanceTotal+expenses+subscription+employerCosts;
 
-let work=0;
-let breaks=0;
-let reg=0;
-let ot150h=0;
-let ot200h=0;
-let sunH=0;
-let clothingDays=0;
-let dayAllowanceTotal=0;
+  document.getElementById('gross').textContent=eur(gross);
+  document.getElementById('net').textContent=eur(net);
+  document.getElementById('totalHours').textContent=work.toFixed(2)+' u';
+  document.getElementById('overtime').textContent=(ot150h+ot200h).toFixed(2)+' u';
+  document.getElementById('resultWork').textContent=eur(base);
+  document.getElementById('resultBreak').textContent=eur(breakPay);
+  document.getElementById('resultOvertimeMoney').textContent=eur(v150+v200);
+  document.getElementById('resultSunday').textContent=eur(sunday);
+  document.getElementById('resultRSZ').textContent=eur(-employeeRSZ);
+  document.getElementById('resultClothes').textContent=eur(cloth);
+  document.getElementById('resultExpenses').textContent=eur(expenses+subscription+employerCosts);
+  document.getElementById('resultPremiums').textContent=eur(dayAllowanceTotal);
+  document.getElementById('resultGross').textContent=eur(gross);
+  document.getElementById('resultNet').textContent=eur(net);
 
+  const resultCol2=document.querySelectorAll('.result-column')[1];
+  if(resultCol2){
+    const baseRows=`
+      <div class="result-row"><span>${profile==='student650low'?'Solidariteitsbijdrage':'Werknemersbijdrage RSZ'}</span><strong>${eur(-employeeRSZ)}</strong></div>
+      ${profile!=='student650low'?`<div class="result-row"><span>Werkbonus</span><strong>${eur(workBonus)}</strong></div>`:''}
+      ${profile!=='student650low'?`<div class="result-row"><span>Bedrijfsvoorheffing</span><strong>${eur(-bv)}</strong></div>`:''}
+      ${profile!=='student650low'?`<div class="result-row"><span>Vermindering overuren</span><strong>${eur(otTaxRelief)}</strong></div>`:''}
+      <div class="result-row"><span>Kledijvergoeding</span><strong>${eur(cloth)}</strong></div>
+      <div class="result-row"><span>Onkosten</span><strong>${eur(expenses+subscription+employerCosts)}</strong></div>
+      <div class="result-row"><span>Netto premies</span><strong>${eur(dayAllowanceTotal)}</strong></div>
+    `;
+    let profileRows='';
+    if(profile==='extra'){
+      profileRows=`
+        <div class="result-row"><span>Vakantiegeld reserve</span><strong>${eur(holidayGross)}</strong></div>
+        <div class="result-row"><span>RSZ vakantiegeld</span><strong>${eur(-holidayRSZ)}</strong></div>
+        <div class="result-row"><span>BV vakantiegeld</span><strong>${eur(-holidayBV)}</strong></div>
+        <div class="result-row"><span>Netto vakantiegeld</span><strong>${eur(holidayNet)}</strong></div>`;
+    } else if(profile==='bediende'){
+      const monthlyGross=num('bediendeMonthlyGross')||gross;
+      const hRate=holidayBVRate2026(monthlyGross*12);
+      profileRows=`
+        <div class="result-row"><span>Dubbel vakantiegeld</span><strong>${eur(holidayGross)}</strong></div>
+        <div class="result-row"><span>RSZ vakantiegeld</span><strong>${eur(-holidayRSZ)}</strong></div>
+        <div class="result-row"><span>BV vakantiegeld (${hRate.toFixed(2)}%)</span><strong>${eur(-holidayBV)}</strong></div>
+        <div class="result-row"><span>Netto vakantiegeld</span><strong>${eur(holidayNet)}</strong></div>`;
+    }
+    resultCol2.innerHTML=baseRows+profileRows;
+  }
 
-document.querySelectorAll(
-'#rows tr'
-).forEach(tr=>{
+  let extraLines='';
+  if(profile==='extra'){
+    extraLines=`<div class="profile-info"><b>Extra — fiscale opbouw</b><br>
+      RSZ-forfait: ${eur(extraRszBase())} → werknemers-RSZ ${eur(employeeRSZ)}<br>
+      Werkbonus: +${eur(workBonus)} · Belastbaar: ${eur(taxable)}<br>
+      Bedrijfsvoorheffing: -${eur(bv)} · vermindering overuren: +${eur(otTaxRelief)}<br>
+      Vakantiegeldreserve: ${eur(holidayGross)} · geschat netto: ${eur(holidayNet)}</div>`;
+  } else if(profile==='bediende'){
+    const monthlyGross=num('bediendeMonthlyGross')||gross;
+    const hRate=holidayBVRate2026(monthlyGross*12);
+    extraLines=`<div class="profile-info"><b>Bediende — fiscale/vakantie-opbouw</b><br>
+      Werkbonus: +${eur(workBonus)} · Bedrijfsvoorheffing: -${eur(bv)}<br>
+      Dubbel vakantiegeld: ${eur(holidayGross)} · RSZ: -${eur(holidayRSZ)} · BV vakantiegeld: ${hRate.toFixed(2)}% (${eur(holidayBV)})<br>
+      Geschat netto vakantiegeld: ${eur(holidayNet)}</div>`;
+  } else {
+    extraLines=`<div class="profile-info"><b>Student</b><br>Solidariteitsbijdrage: 2,71%. Geen normale bedrijfsvoorheffing opgenomen.</div>`;
+  }
+  document.getElementById('breakdown').innerHTML=[
+    ['Normale uren',`${reg.toFixed(2)} u × ${eur(rate)}`,base],
+    ['Betaalde pauze',`${breaks.toFixed(2)} u × ${eur(rate)}`,breakPay],
+    ['Overuren 150%',`${ot150h.toFixed(2)} u × ${eur(o150)}`,v150],
+    ['Overuren 200%',`${ot200h.toFixed(2)} u × ${eur(o200)}`,v200],
+    ['Zondagpremie',`${sunH.toFixed(2)} u × ${eur(sunRate)}`,sunday],
+    ['Bruto',``,gross],
+    [profile==='student650low'?'Solidariteitsbijdrage':'Werknemersbijdrage RSZ',``, -employeeRSZ],
+    ...(profile==='extra' ? [['Werkbonus','',workBonus],['Bedrijfsvoorheffing',`${num('extraBVRate').toFixed(2)}%`, -bv],['Vermindering overuren','',otTaxRelief],['Vakantiegeld reserve','',holidayGross]] : []),
+    ...(profile==='bediende' ? [['Werkbonus','',workBonus],['Bedrijfsvoorheffing',`${num('bediendeBVRate').toFixed(2)}%`, -bv],['Vermindering overuren','',otTaxRelief],['Dubbel vakantiegeld','',holidayGross]] : []),
+    ['Kledijvergoeding',`${clothingDays.toFixed(0)} dag(en)`,cloth],
+    ['Dagvergoeding','Buitenland',dayAllowanceTotal],
+    ['Andere netto onkosten','',expenses+subscription+employerCosts],
+    ['Geschat netto','',net]
+  ].map((x,i)=>`<div class="${i===5||i===x.length-1?'total':''}">${x[0]}</div><div class="right ${i===5||i===x.length-1?'total':''}">${eur(x[2])}</div>`).join('')+extraLines;
 
-const w=
-Number(
-tr.querySelector('.work').value
-)||0;
-
-const b=
-Number(
-tr.querySelector('.break').value
-)||0;
-
-const sun=
-Number(
-tr.querySelector('.sun').value
-)||0;
-
-let a=
-Number(
-tr.querySelector('.ot150').value
-);
-
-let z=
-Number(
-tr.querySelector('.ot200').value
-);
-
-if(!Number.isFinite(a))a=0;
-if(!Number.isFinite(z))z=0;
-
-const excess=
-Math.max(
-0,
-w-threshold
-);
-
-if(
-!tr.querySelector('.ot150').value&&
-!tr.querySelector('.ot200').value
-){
-
-if(
-dateDay(
-tr.querySelector('.date').value
-)===0
-){
-
-z=excess;
-a=0;
-
-}else{
-
-a=excess;
-z=0;
-
+  const pn=document.getElementById('payslipNet')?.value||'',pg=document.getElementById('payslipGross')?.value||'';
+  let compareHtml='';
+  if(pn) compareHtml+=`<div>Verschil netto</div><div class="right">${eur(net-Number(pn))}</div>`;
+  if(pg) compareHtml+=`<div>Verschil bruto</div><div class="right">${eur(gross-Number(pg))}</div>`;
+  document.getElementById('compare').innerHTML=compareHtml;
 }
-
-}
-
-const regH=
-Math.max(
-0,
-w-a-z
-);
-
-work+=w;
-breaks+=b;
-reg+=regH;
-ot150h+=a;
-ot200h+=z;
-sunH+=sun;
-
-clothingDays+=
-Number(
-tr.querySelector('.clothes').value
-)||0;
-
-dayAllowanceTotal+=
-Number(
-tr.querySelector('.days').value
-)||0;
-
-});
-
-
-const base=
-reg*rate;
-
-const breakPay=
-breaks*rate;
-
-const v150=
-ot150h*o150;
-
-const v200=
-ot200h*o200;
-
-const sunday=
-sunH*sunRate;
-
-const cloth=
-clothingDays*clothes;
-
-const gross=
-base+
-breakPay+
-v150+
-v200+
-sunday;
-
-
-let employeeRSZ=0;
-let workBonus=0;
-let taxable=gross;
-let bv=0;
-let otTaxRelief=0;
-let subscription=0;
-let employerCosts=0;
-let holidayGross=0;
-let holidayRSZ=0;
-let holidayTaxable=0;
-let holidayBV=0;
-let holidayNet=0;
-
-
-/* STUDENT */
-
-if(profile==='student650low'){
-
-employeeRSZ=
-gross*0.0271;
-
-taxable=
-gross-employeeRSZ;
-
-}
-
-
-/* EXTRA */
-
-else if(profile==='extra'){
-
-const rszBase=
-extraRszBase();
-
-employeeRSZ=
-rszBase*0.1307;
-
-
-/*
-Werkbonus gekalibreerd
-op basis van de aangeleverde Extra-loonbrief.
-*/
-
-workBonus=
-Math.min(
-employeeRSZ,
-127.54*
-(work/184.67)
-);
-
-taxable=
-gross-
-employeeRSZ+
-workBonus;
-
-const bvRate=
-num('extraBVRate')/100;
-
-bv=
-taxable*bvRate;
-
-otTaxRelief=
-(ot150h+ot200h)*
-rate*
-0.5775;
-
-subscription=
-num('extraSubscription');
-
-employerCosts=
-num('extraEmployerCosts');
-
-
-/*
-Vakantiegeldreserve.
-*/
-
-holidayGross=
-gross*
-(
-num('extraHolidayRate')/100
-);
-
-const holidayDouble=
-holidayGross*
-0.4433;
-
-holidayRSZ=
-holidayDouble*
-0.1307;
-
-holidayTaxable=
-holidayGross-
-holidayRSZ;
-
-holidayBV=
-holidayTaxable*
-bvRate;
-
-holidayNet=
-holidayTaxable-
-holidayBV;
-
-}
-
-
-/* BEDIENDE */
-
-else{
-
-employeeRSZ=
-gross*0.1307;
-
-workBonus=
-workBonusBediende(gross);
-
-employeeRSZ=
-Math.max(
-0,
-employeeRSZ-workBonus
-);
-
-taxable=
-gross-employeeRSZ;
-
-const bvRate=
-num('bediendeBVRate')/100;
-
-bv=
-taxable*bvRate;
-
-otTaxRelief=
-(ot150h+ot200h)*
-rate*
-0.5775;
-
-const monthlyGross=
-num('bediendeMonthlyGross')
-||gross;
-
-holidayGross=
-monthlyGross*
-0.92;
-
-holidayRSZ=
-holidayGross*
-0.1307;
-
-holidayTaxable=
-holidayGross-
-holidayRSZ;
-
-holidayBV=
-holidayTaxable*
-(
-holidayBVRate2026(
-monthlyGross*12
-)/100
-);
-
-holidayNet=
-holidayTaxable-
-holidayBV;
-
-}
-
-
-let expenses=0;
-
-document.querySelectorAll(
-'.eamount'
-)
-.forEach(
-x=>
-expenses+=
-Number(x.value)||0
-);
-
-
-const net=
-gross-
-employeeRSZ+
-workBonus-
-bv+
-otTaxRelief+
-cloth+
-dayAllowanceTotal+
-expenses+
-subscription+
-employerCosts;
-
-
-/* BOVENSTE RESULTATEN */
-
-document.getElementById('gross')
-.textContent=
-eur(gross);
-
-document.getElementById('net')
-.textContent=
-eur(net);
-
-document.getElementById('totalHours')
-.textContent=
-work.toFixed(2)+' u';
-
-document.getElementById('overtime')
-.textContent=
-(
-ot150h+
-ot200h
-).toFixed(2)+' u';
-
-
-/* LINKER RESULTAATKOLOM */
-
-document.getElementById('resultWork')
-.textContent=
-eur(base);
-
-document.getElementById('resultBreak')
-.textContent=
-eur(breakPay);
-
-document.getElementById('resultOvertimeMoney')
-.textContent=
-eur(v150+v200);
-
-document.getElementById('resultSunday')
-.textContent=
-eur(sunday);
-
-
-/* RECHTER RESULTAATKOLOM */
-
-document.getElementById('resultRSZ')
-.textContent=
-eur(-employeeRSZ);
-
-document.getElementById('resultClothes')
-.textContent=
-eur(cloth);
-
-document.getElementById('resultExpenses')
-.textContent=
-eur(
-expenses+
-subscription+
-employerCosts
-);
-
-document.getElementById('resultPremiums')
-.textContent=
-eur(dayAllowanceTotal);
-
-
-/* GROTE RESULTATEN */
-
-document.getElementById('resultGross')
-.textContent=
-eur(gross);
-
-document.getElementById('resultNet')
-.textContent=
-eur(net);
-
-
-/*
-Dynamische loonopbouw.
-Student krijgt geen fiscale/vakantiegeldregels.
-Extra en Bediende wel.
-*/
-
-const resultCol2=
-document.querySelectorAll(
-'.result-column'
-)[1];
-
-
-if(resultCol2){
-
-let html=`
-
-<div class="result-row">
-<span>
-${
-profile==='student650low'
-?'Solidariteitsbijdrage'
-:'Werknemersbijdrage RSZ'
-}
-</span>
-<strong>
-${eur(-employeeRSZ)}
-</strong>
-</div>
-
-`;
-
-if(profile!=='student650low'){
-
-html+=`
-
-<div class="result-row">
-<span>Werkbonus</span>
-<strong>${eur(workBonus)}</strong>
-</div>
-
-<div class="result-row">
-<span>Bedrijfsvoorheffing</span>
-<strong>${eur(-bv)}</strong>
-</div>
-
-<div class="result-row">
-<span>Vermindering overuren</span>
-<strong>${eur(otTaxRelief)}</strong>
-</div>
-
-`;
-
-}
-
-
-html+=`
-
-<div class="result-row">
-<span>Kledijvergoeding</span>
-<strong>${eur(cloth)}</strong>
-</div>
-
-<div class="result-row">
-<span>Onkosten</span>
-<strong>
-${eur(
-expenses+
-subscription+
-employerCosts
-)}
-</strong>
-</div>
-
-<div class="result-row">
-<span>Netto premies</span>
-<strong>${eur(dayAllowanceTotal)}</strong>
-</div>
-
-`;
-
-
-/* EXTRA */
-
-if(profile==='extra'){
-
-html+=`
-
-<div class="result-row">
-<span>Vakantiegeld reserve</span>
-<strong>${eur(holidayGross)}</strong>
-</div>
-
-<div class="result-row">
-<span>RSZ vakantiegeld</span>
-<strong>${eur(-holidayRSZ)}</strong>
-</div>
-
-<div class="result-row">
-<span>BV vakantiegeld</span>
-<strong>${eur(-holidayBV)}</strong>
-</div>
-
-<div class="result-row">
-<span>Netto vakantiegeld</span>
-<strong>${eur(holidayNet)}</strong>
-</div>
-
-`;
-
-}
-
-
-/* BEDIENDE */
-
-if(profile==='bediende'){
-
-const monthlyGross=
-num('bediendeMonthlyGross')
-||gross;
-
-const hRate=
-holidayBVRate2026(
-monthlyGross*12
-);
-
-html+=`
-
-<div class="result-row">
-<span>Dubbel vakantiegeld</span>
-<strong>${eur(holidayGross)}</strong>
-</div>
-
-<div class="result-row">
-<span>RSZ vakantiegeld</span>
-<strong>${eur(-holidayRSZ)}</strong>
-</div>
-
-<div class="result-row">
-<span>
-BV vakantiegeld (${hRate.toFixed(2)}%)
-</span>
-<strong>${eur(-holidayBV)}</strong>
-</div>
-
-<div class="result-row">
-<span>Netto vakantiegeld</span>
-<strong>${eur(holidayNet)}</strong>
-</div>
-
-`;
-
-}
-
-
-resultCol2.innerHTML=
-html;
-
-}
-
-
-/* VERBORGEN VOLLEDIGE LOONOPBOUW */
-
-document.getElementById('breakdown')
-.innerHTML=[
-
-[
-'Normale uren',
-`${reg.toFixed(2)} u × ${eur(rate)}`,
-base
-],
-
-[
-'Betaalde pauze',
-`${breaks.toFixed(2)} u × ${eur(rate)}`,
-breakPay
-],
-
-[
-'Overuren 150%',
-`${ot150h.toFixed(2)} u × ${eur(o150)}`,
-v150
-],
-
-[
-'Overuren 200%',
-`${ot200h.toFixed(2)} u × ${eur(o200)}`,
-v200
-],
-
-[
-'Zondagpremie',
-`${sunH.toFixed(2)} u × ${eur(sunRate)}`,
-sunday
-],
-
-[
-'Bruto',
-'',
-gross
-],
-
-[
-profile==='student650low'
-?'Solidariteitsbijdrage'
-:'Werknemersbijdrage RSZ',
-'',
--employeeRSZ
-],
-
-...(profile==='extra'
-?[
-
-['Werkbonus','',workBonus],
-
-[
-'Bedrijfsvoorheffing',
-`${num('extraBVRate').toFixed(2)}%`,
--bv
-],
-
-[
-'Vermindering overuren',
-'',
-otTaxRelief
-],
-
-[
-'Vakantiegeld reserve',
-'',
-holidayGross
-]
-
-]
-:[]),
-
-...(profile==='bediende'
-?[
-
-['Werkbonus','',workBonus],
-
-[
-'Bedrijfsvoorheffing',
-`${num('bediendeBVRate').toFixed(2)}%`,
--bv
-],
-
-[
-'Vermindering overuren',
-'',
-otTaxRelief
-],
-
-[
-'Dubbel vakantiegeld',
-'',
-holidayGross
-]
-
-]
-:[]),
-
-[
-'Kledijvergoeding',
-`${clothingDays.toFixed(0)} dag(en)`,
-cloth
-],
-
-[
-'Dagvergoeding',
-'Buitenland',
-dayAllowanceTotal
-],
-
-[
-'Andere netto onkosten',
-'',
-expenses+
-subscription+
-employerCosts
-],
-
-[
-'Geschat netto',
-'',
-net
-]
-
-]
-
-.map(
-(x,i)=>
-`<div>${x[0]}</div>
-<div class="right">${eur(x[2])}</div>`
-)
-.join('');
-
-
-/* VERGELIJKING */
-
-const pn=
-document.getElementById('payslipNet')
-?.value||'';
-
-let compareHtml='';
-
-if(pn){
-
-compareHtml+=`
-
-<div>Verschil netto</div>
-
-<div class="right">
-${eur(net-Number(pn))}
-</div>
-
-`;
-
-}
-
-document.getElementById('compare')
-.innerHTML=
-compareHtml;
-
-}
-
-
-/* OPSLAAN */
 
 function saveData(){
-
-const ids=[
-
-'profile',
-'rate',
-'ot150',
-'ot200',
-'sunday',
-'clothes',
-'studentRSZ',
-'threshold',
-'payslipNet',
-'extraBVRate',
-'extraSubscription',
-'extraEmployerCosts',
-'extraHolidayRate',
-'bediendeBVRate',
-'bediendeMonthlyGross'
-
-];
-
-const data={
-
-settings:Object.fromEntries(
-
-ids.map(
-id=>
-[
-id,
-document.getElementById(id).value
-]
-)
-
-),
-
-rows:[
-...document.querySelectorAll(
-'#rows tr'
-)
-].map(tr=>({
-
-shift:
-tr.querySelector('.shift').value,
-
-date:
-tr.querySelector('.date').value,
-
-start:
-tr.querySelector('.start').value,
-
-end:
-tr.querySelector('.end').value,
-
-work:
-tr.querySelector('.work').value,
-
-break:
-tr.querySelector('.break').value,
-
-ot150:
-tr.querySelector('.ot150').value,
-
-ot200:
-tr.querySelector('.ot200').value,
-
-sun:
-tr.querySelector('.sun').value,
-
-clothes:
-tr.querySelector('.clothes').value,
-
-days:
-tr.querySelector('.days').value,
-
-staydays:
-tr.querySelector('.staydays').value
-
-})),
-
-expenses:[
-...document.querySelectorAll(
-'#expenses > div'
-)
-].map(d=>({
-
-name:
-d.querySelector('.ename').value,
-
-amount:
-d.querySelector('.eamount').value
-
-}))
-
-};
-
-localStorage.setItem(
-'looncontrole',
-JSON.stringify(data)
-);
-
-alert(
-'Opgeslagen in deze browser.'
-);
-
+ const ids=['rate','ot150','ot200','sunday','clothes','studentRSZ','threshold','payslipNet','payslipGross','extraBVRate','extraSubscription','extraEmployerCosts','extraHolidayRate','bediendeBVRate','bediendeMonthlyGross'];
+ const data={settings:Object.fromEntries(ids.map(id=>[id,document.getElementById(id).value])),rows:[...document.querySelectorAll('#rows tr')].map(tr=>({shift:tr.querySelector('.shift').value,date:tr.querySelector('.date').value,start:tr.querySelector('.start').value,end:tr.querySelector('.end').value,work:tr.querySelector('.work').value,break:tr.querySelector('.break').value,ot150:tr.querySelector('.ot150').value,ot200:tr.querySelector('.ot200').value,sun:tr.querySelector('.sun').value,clothes:tr.querySelector('.clothes').value,days:tr.querySelector('.days').value,staydays:tr.querySelector('.staydays').value})),expenses:[...document.querySelectorAll('#expenses > div')].map(d=>({name:d.querySelector('.ename').value,amount:d.querySelector('.eamount').value}))};
+ localStorage.setItem('looncontrole',JSON.stringify(data));alert('Opgeslagen in deze browser.');
 }
-
-
-/* LADEN */
-
 function loadData(){
-
-const d=
-JSON.parse(
-localStorage.getItem(
-'looncontrole'
-)||'null'
-);
-
-if(!d){
-
-alert(
-'Geen opgeslagen gegevens.'
-);
-
-return;
-
+ const d=JSON.parse(localStorage.getItem('looncontrole')||'null');if(!d){alert('Geen opgeslagen gegevens.');return}
+ Object.entries(d.settings||{}).forEach(([id,v])=>{if(document.getElementById(id))document.getElementById(id).value=v});
+ applyProfile();
+ document.getElementById('rows').innerHTML='';(d.rows||[]).forEach(addRow);document.getElementById('expenses').innerHTML='';(d.expenses||[]).forEach(addExpense);calc();
 }
-
-
-Object.entries(
-d.settings||{}
-)
-.forEach(
-([id,v])=>{
-
-if(
-document.getElementById(id)
-)
-document.getElementById(id).value=v;
-
-});
-
-
-document.querySelectorAll(
-'.profile-tab'
-)
-.forEach(
-b=>
-b.classList.toggle(
-'active',
-b.dataset.profile===
-document.getElementById(
-'profile'
-).value
-)
-);
-
-
-applyProfile();
-
-
-document.getElementById(
-'rows'
-).innerHTML='';
-
-
-(d.rows||[])
-.forEach(addRow);
-
-
-document.getElementById(
-'expenses'
-).innerHTML='';
-
-
-(d.expenses||[])
-.forEach(addExpense);
-
-
-calc();
-
-}
-
-
-/* RESET */
-
-function resetAll(){
-
-if(
-!confirm(
-'Alles wissen?'
-)
-)return;
-
-localStorage.removeItem(
-'looncontrole'
-);
-
-location.reload();
-
-}
-
-
-/* INPUT LISTENERS */
-
-[
-'rate',
-'ot150',
-'ot200',
-'sunday',
-'clothes',
-'threshold',
-'payslipNet',
-'extraBVRate',
-'extraSubscription',
-'extraEmployerCosts',
-'extraHolidayRate',
-'bediendeBVRate',
-'bediendeMonthlyGross'
-
-].forEach(id=>{
-
-const el=
-document.getElementById(id);
-
-if(el)
-el.addEventListener(
-'input',
-calc
-);
-
-});
-
-
-document.getElementById(
-'profile'
-)
-.addEventListener(
-'change',
-applyProfile
-);
-
-
-/* START */
-
-switchProfilePage(
-document.getElementById(
-'profile'
-).value
-);
-
-addRow();
-
-calc();
-
+function resetAll(){if(!confirm('Alles wissen?'))return;localStorage.removeItem('looncontrole');location.reload()}
+['rate','ot150','ot200','sunday','clothes','threshold','payslipNet','payslipGross','extraBVRate','extraSubscription','extraEmployerCosts','extraHolidayRate','bediendeBVRate','bediendeMonthlyGross'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',calc)});switchProfilePage(currentProfile);addRow();calc();
 </script>
-
 </body>
 </html>
