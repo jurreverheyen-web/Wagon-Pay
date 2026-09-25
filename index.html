@@ -51,7 +51,7 @@ button{border:0;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:65
 <div class="hidden-setting"><label>Overuren 200% (€ / uur)</label><input id="ot200" type="number" step=".0001" value="31.94"></div>
 <div class="hidden-setting"><label>Zondagpremie (€ / uur)</label><input id="sunday" type="number" step=".01" value="2.00"></div>
 <div class="hidden-setting"><label>Kledijvergoeding (€ / dag)</label><input id="clothes" type="number" step=".01" value="2.20"></div>
-<div><label>Sociale bijdrage (%)</label><input id="studentRSZ" type="number" step=".01" value="2.71"><small style="display:block;margin-top:5px;color:var(--muted)">Standaard de verminderde solidariteitsbijdrage van 2,71%.</small></div>
+<div><label id="rszLabel">Sociale bijdrage (%)</label><input id="studentRSZ" type="number" step=".01" value="2.71" readonly><small id="rszHelp" style="display:block;margin-top:5px;color:var(--muted)">Student: verminderde solidariteitsbijdrage 2,71%.</small></div>
 <div class="hidden-setting"><label>Overuren vanaf (werkuren)</label><input id="threshold" type="number" step=".01" value="11"></div>
 </div>
 
@@ -68,7 +68,7 @@ button{border:0;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:65
 </div>
 
 <div class="card">
-<h2>3. Onkosten of Premies</h2>
+<h2>3. Extra vergoedingen</h2>
 <div id="expenses"></div>
 <div class="actions"><button class="secondary" onclick="addExpense()">+ Kost toevoegen</button></div>
 
@@ -127,7 +127,7 @@ const PROFILES={
  extra:{rate:15.97,ot150:23.955,ot200:31.94,sunday:2.00,clothes:2.20,rsz:13.07,threshold:11},
  bediende:{rate:15.97,ot150:23.955,ot200:31.94,sunday:2.00,clothes:2.20,rsz:13.07,threshold:11}
 };
-function applyProfile(){const p=PROFILES[document.getElementById('profile').value];if(!p)return;document.getElementById('rate').value=p.rate;document.getElementById('ot150').value=p.ot150;document.getElementById('ot200').value=p.ot200;document.getElementById('sunday').value=p.sunday;document.getElementById('clothes').value=p.clothes;document.getElementById('studentRSZ').value=p.rsz;document.getElementById('threshold').value=p.threshold;calc();}
+function applyProfile(){const profile=document.getElementById('profile').value;const p=PROFILES[profile];if(!p)return;document.getElementById('rate').value=p.rate;document.getElementById('ot150').value=p.ot150;document.getElementById('ot200').value=p.ot200;document.getElementById('sunday').value=p.sunday;document.getElementById('clothes').value=p.clothes;document.getElementById('studentRSZ').value=p.rsz;document.getElementById('threshold').value=p.threshold;const label=document.getElementById('rszLabel');const help=document.getElementById('rszHelp');if(profile==='student650low'){label.textContent='Solidariteitsbijdrage (%)';help.textContent='Student: verminderde solidariteitsbijdrage 2,71%.';}else{label.textContent='Sociale bijdrage (%)';help.textContent='Extra/Bediende: normale werknemersbijdrage 13,07%.';}calc();}
 const eur=n=>new Intl.NumberFormat('nl-BE',{style:'currency',currency:'EUR'}).format(Number(n)||0);
 const num=id=>Number(document.getElementById(id).value)||0;
 
@@ -450,8 +450,8 @@ function loadData(){
  Object.entries(d.settings||{}).forEach(([id,v])=>{if(document.getElementById(id))document.getElementById(id).value=v});document.getElementById('rows').innerHTML='';(d.rows||[]).forEach(addRow);document.getElementById('expenses').innerHTML='';(d.expenses||[]).forEach(addExpense);calc();
 }
 function resetAll(){if(!confirm('Alles wissen?'))return;localStorage.removeItem('looncontrole');location.reload()}
-['rate','ot150','ot200','sunday','clothes','studentRSZ','threshold','payslipNet','payslipGross'].forEach(id=>document.getElementById(id).addEventListener('input',calc));document.getElementById('profile').addEventListener('change',applyProfile);
-addRow();calc();
+['rate','ot150','ot200','sunday','clothes','threshold','payslipNet','payslipGross'].forEach(id=>document.getElementById(id).addEventListener('input',calc));document.getElementById('profile').addEventListener('change',applyProfile);
+addRow();applyProfile();
 </script>
 </body>
 </html>
