@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Looncontrole — PC 302 Student</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#667085;--line:#e4e7ec;--accent:#2563eb;--good:#087443;--warn:#b54708;--danger:#b42318}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#111827;color:white;padding:28px 20px}header .wrap{max-width:1180px;margin:auto}h1{margin:0 0 6px;font-size:28px}header p{margin:0;color:#cbd5e1}
+main{max-width:1180px;margin:24px auto;padding:0 16px}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 3px 12px #10182808;margin-bottom:18px}
+h2{font-size:18px;margin:0 0 16px}h3{font-size:15px;margin:20px 0 10px}.formgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,select,button{font:inherit}input,select{width:100%;padding:10px 11px;border:1px solid #d0d5dd;border-radius:9px;background:white;color:var(--text)}
+button{border:0;border-radius:9px;padding:10px 14px;cursor:pointer}.primary{background:var(--accent);color:#fff}.secondary{background:#eef2f6;color:#172033}.danger{background:#fee4e2;color:var(--danger)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.tablewrap{overflow:auto}.hours{width:100%;border-collapse:collapse}.hours th,.hours td{padding:9px 7px;border-bottom:1px solid var(--line);vertical-align:middle}.hours th{text-align:left;color:var(--muted);font-size:12px}.hours input{min-width:80px;padding:8px}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.kpi{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:14px}.kpi .v{font-size:22px;font-weight:750}.kpi .l{font-size:12px;color:var(--muted);margin-top:3px}
+.breakdown{display:grid;grid-template-columns:1fr auto;gap:0}.breakdown div{padding:7px 0;border-bottom:1px solid var(--line)}.right{text-align:right}.total{font-size:20px;font-weight:800}.note{font-size:12px;color:var(--muted);line-height:1.5}.tag{display:inline-block;border-radius:99px;padding:4px 8px;background:#eff6ff;color:#1d4ed8;font-size:11px}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr 1fr}}@media(max-width:520px){.formgrid{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>💶 Looncontrole</h1><p>Student · PC 302 · vergelijk je eigen berekening met je loonbrief</p></div></header>
+<main>
+<div class="grid">
+<section>
+<div class="card">
+<h2>1. Instellingen</h2>
+<div class="formgrid">
+<div><label>Bruto uurloon (€)</label><input id="rate" type="number" step=".0001" value="15.97"></div>
+<div><label>Overuren 150% (€ / uur)</label><input id="ot150" type="number" step=".0001" value="23.955"></div>
+<div><label>Overuren 200% (€ / uur)</label><input id="ot200" type="number" step=".0001" value="31.94"></div>
+<div><label>Zondagpremie (€ / uur)</label><input id="sunday" type="number" step=".01" value="2.00"></div>
+<div><label>Nachtpremie (€ / uur)</label><input id="night" type="number" step=".01" value="1.62"></div>
+<div><label>Kledijvergoeding (€ / dag)</label><input id="clothes" type="number" step=".01" value="2.20"></div>
+<div><label>Studentenbijdrage (%)</label><input id="studentRSZ" type="number" step=".01" value="2.71"></div>
+<div><label>Overuren vanaf (werkuren)</label><input id="threshold" type="number" step=".01" value="11"></div>
+<div><label>Betaalde pauze per shift (uren)</label><input id="paidBreakDefault" type="number" step=".01" value="5"></div>
+</div>
+<p class="note">Standaardwaarden zijn gebaseerd op je contract/loonbrieven. Pas ze aan als je werkgever of loonbrief andere bedragen gebruikt.</p>
+</div>
+
+<div class="card">
+<h2>2. Gewerkte dagen</h2>
+<p class="note">Vul per dag de effectief gewerkte uren in. Betaalde pauze, zondag, nachturen en kosten kun je apart ingeven. Overuren worden automatisch berekend zodra je boven de ingestelde drempel komt.</p>
+<div class="tablewrap">
+<table class="hours"><thead><tr><th>Datum</th><th>Werkuren</th><th>Betaalde pauze</th><th>Zondag</th><th>150%</th><th>200%</th><th>Nachturen</th><th>Kledij</th><th></th></tr></thead>
+<tbody id="rows"></tbody></table>
+</div>
+<div class="actions"><button class="primary" onclick="addRow()">+ Dag toevoegen</button><button class="secondary" onclick="addPreset()">Voorbeeld uit loonbrief</button></div>
+</div>
+
+<div class="card">
+<h2>3. Premies</h2>
+<div id="premiums"></div>
+<div class="actions"><button class="secondary" onclick="addPremium()">+ Premie toevoegen</button></div>
+<p class="note">Voeg hier een extra brutopremie toe die in het loon moet worden opgenomen. De premie wordt meegenomen in het bruto loon en de RSZ-berekening.</p>
+</div>
+
+<div class="card">
+<h2>4. Vergoedingen en onkosten</h2>
+<div id="expenses"></div>
+<div class="actions"><button class="secondary" onclick="addExpense()">+ Kost toevoegen</button></div>
+<p class="note">Gebruik bijvoorbeeld “Kosten eigen werkgever”, sociaal abonnement of andere netto vergoedingen. Geef het bedrag in dat je volgens je loonafspraak/bonnetje hoort te krijgen.</p>
+</div>
+</section>
+
+<aside>
+<div class="card">
+<h2>Resultaat</h2>
+<div class="kpis">
+<div class="kpi"><div class="v" id="gross">€ 0,00</div><div class="l">Bruto loon</div></div>
+<div class="kpi"><div class="v" id="net">€ 0,00</div><div class="l">Geschat netto</div></div>
+<div class="kpi"><div class="v" id="totalHours">0,00 u</div><div class="l">Werkuren</div></div>
+<div class="kpi"><div class="v" id="overtime">0,00 u</div><div class="l">Overuren</div></div>
+</div>
+<h3>Loonopbouw</h3><div class="breakdown" id="breakdown"></div>
+<h3>Vergelijk met loonbrief</h3>
+<div class="formgrid">
+<div><label>Netto volgens loonbrief (€)</label><input id="payslipNet" type="number" step=".01" placeholder="bv. 654.55"></div>
+<div><label>Bruto volgens loonbrief (€)</label><input id="payslipGross" type="number" step=".01" placeholder="bv. 615.43"></div>
+</div>
+<div class="breakdown" id="compare"></div>
+<div class="actions"><button class="primary" onclick="saveData()">Opslaan in browser</button><button class="secondary" onclick="loadData()">Laden</button><button class="danger" onclick="resetAll()">Alles wissen</button></div>
+</div>
+
+<div class="card">
+<h2>Controlelogica</h2>
+<p class="note">
+<strong>Werkuren:</strong> basisuurloon × werkuren.<br>
+<strong>Overuren:</strong> uren boven de ingestelde dagdrempel worden als 150% gerekend, behalve wanneer je ze expliciet als 200% ingeeft.<br>
+<strong>Zondag:</strong> zondagpremie komt bovenop het loon en de overurentoeslag.<br>
+<strong>Student:</strong> de standaard solidariteitsbijdrage staat op 2,71% omdat dit overeenkomt met de aangeleverde loonbrieven.<br>
+<strong>Netto:</strong> in deze eenvoudige controle wordt bruto − studentenbijdrage + netto vergoedingen gebruikt. Dit is een controletool, geen officiële loonberekening.
+</p>
+</div>
+</aside>
+</div>
+</main>
+<script>
+const eur = n => new Intl.NumberFormat('nl-BE',{style:'currency',currency:'EUR'}).format(Number(n)||0);
+const num = id => Number(document.getElementById(id).value)||0;
+function addRow(data={date:'',work:'',break:'',sun:'0',ot150:'',ot200:'',night:'',clothes:'1'}){
+ const tr=document.createElement('tr');
+ tr.innerHTML=`<td><input type="date" value="${data.date||''}" onchange="calc()"></td>
+ <td><input class="work" type="number" step=".01" value="${data.work||''}" placeholder="11"></td>
+ <td><input class="break" type="number" step=".01" value="${data.break||''}" placeholder="${num('paidBreakDefault')}"></td>
+ <td><select class="sun"><option value="0" ${!Number(data.sun)?'selected':''}>Nee</option><option value="1" ${Number(data.sun)?'selected':''}>Ja</option></select></td>
+ <td><input class="ot150" type="number" step=".01" value="${data.ot150||''}" placeholder="auto"></td>
+ <td><input class="ot200" type="number" step=".01" value="${data.ot200||''}" placeholder="0"></td>
+ <td><input class="night" type="number" step=".01" value="${data.night||''}" placeholder="0"></td>
+ <td><input class="clothes" type="number" step=".01" value="${data.clothes ?? 1}"></td>
+ <td><button class="danger" onclick="this.closest('tr').remove();calc()">×</button></td>`;
+ document.getElementById('rows').appendChild(tr);
+ tr.querySelectorAll('input,select').forEach(x=>x.addEventListener('input',calc));
+ calc();
+}
+function addPremium(data={name:'',amount:''}){
+ const d=document.createElement('div'); d.style.cssText='display:grid;grid-template-columns:1fr 150px 42px;gap:8px;margin-bottom:8px';
+ d.innerHTML=`<input class="pname" placeholder="bv. feestdagpremie / andere premie" value="${data.name||''}">
+ <input class="pamount" type="number" step=".01" placeholder="€" value="${data.amount||''}">
+ <button class="danger" onclick="this.parentElement.remove();calc()">×</button>`;
+ document.getElementById('premiums').appendChild(d); d.querySelectorAll('input').forEach(x=>x.addEventListener('input',calc)); calc();
+}
+function addExpense(data={name:'',amount:''}){
+ const d=document.createElement('div'); d.style.cssText='display:grid;grid-template-columns:1fr 150px 42px;gap:8px;margin-bottom:8px';
+ d.innerHTML=`<input class="ename" placeholder="bv. sociaal abonnement / kosten eigen werkgever" value="${data.name||''}">
+ <input class="eamount" type="number" step=".01" placeholder="€" value="${data.amount||''}">
+ <button class="danger" onclick="this.parentElement.remove();calc()">×</button>`;
+ document.getElementById('expenses').appendChild(d);
+ d.querySelectorAll('input').forEach(x=>x.addEventListener('input',calc));
+ calc();
+}
+function addPreset(){
+ document.getElementById('rows').innerHTML='';
+ const preset=[
+ {date:'2026-08-03',work:11,break:5,ot150:6,clothes:1},
+ {date:'2026-08-05',work:11,break:5,ot150:4.17,clothes:1},
+ {date:'2026-08-07',work:11,break:5,ot150:3.33,clothes:1},
+ {date:'2026-08-09',work:11,break:5,ot200:3.33,sun:1,clothes:1}
+ ];
+ preset.forEach(addRow);
+}
+function calc(){
+ const rate=num('rate'), o150=num('ot150'), o200=num('ot200'), sunRate=num('sunday'), nightRate=num('night'), clothes=num('clothes'), rsz=num('studentRSZ')/100, threshold=num('threshold');
+ let work=0, breaks=0, reg=0, ot150h=0, ot200h=0, sunH=0, nightH=0, clothingDays=0;
+ document.querySelectorAll('#rows tr').forEach(tr=>{
+   const w=Number(tr.querySelector('.work').value)||0, b=Number(tr.querySelector('.break').value)||0;
+   const sun=Number(tr.querySelector('.sun').value)||0, n=Number(tr.querySelector('.night').value)||0;
+   let a=Number(tr.querySelector('.ot150').value), z=Number(tr.querySelector('.ot200').value);
+   if(!tr.querySelector('.ot150').value && !tr.querySelector('.ot200').value) a=Math.max(0,w-threshold);
+   if(!Number.isFinite(a)) a=0;if(!Number.isFinite(z))z=0;
+   const explicit=a+z>0;
+   const regH=explicit ? Math.max(0,w-a-z) : Math.min(w,threshold);
+   work+=w;breaks+=b;reg+=regH;ot150h+=a;ot200h+=z;sunH+=sun*w;nightH+=n;
+   clothingDays+=Number(tr.querySelector('.clothes').value)||0;
+ });
+ const base=reg*rate, v150=ot150h*o150, v200=ot200h*o200, sunday=sunH*sunRate, night=nightH*nightRate, cloth=clothingDays*clothes;
+ let premiums=0; document.querySelectorAll('.pamount').forEach(x=>premiums+=Number(x.value)||0);
+ const gross=base+v150+v200+sunday+night+premiums;
+ const student=gross*rsz;
+ let expenses=0; document.querySelectorAll('.eamount').forEach(x=>expenses+=Number(x.value)||0);
+ const net=gross-student+cloth+expenses;
+ document.getElementById('gross').textContent=eur(gross);document.getElementById('net').textContent=eur(net);
+ document.getElementById('totalHours').textContent=work.toFixed(2)+' u';document.getElementById('overtime').textContent=(ot150h+ot200h).toFixed(2)+' u';
+ document.getElementById('breakdown').innerHTML=[
+ ['Normale uren',`${reg.toFixed(2)} u × ${eur(rate)}`,base],
+ ['Overuren 150%',`${ot150h.toFixed(2)} u × ${eur(o150)}`,v150],
+ ['Overuren 200%',`${ot200h.toFixed(2)} u × ${eur(o200)}`,v200],
+ ['Zondagpremie',`${sunH.toFixed(2)} u × ${eur(sunRate)}`,sunday],
+ ['Nachtpremie',`${nightH.toFixed(2)} u × ${eur(nightRate)}`,night],
+ ['Extra premies',``,premiums],
+ ['Bruto',``,gross],
+ ['RSZ',`${(rsz*100).toFixed(2)}%`, -student],
+ ['Kledijvergoeding',`${clothingDays.toFixed(0)} dag(en)`,cloth],
+ ['Andere netto onkosten',``,expenses],
+ ['Geschat netto',``,net]
+ ].map((x,i)=>`<div class="${i===5||i===9?'total':''}">${x[0]}</div><div class="right ${i===5||i===9?'total':''}">${eur(x[2])}</div>`).join('');
+ const pn=document.getElementById('payslipNet').value, pg=document.getElementById('payslipGross').value;
+ document.getElementById('compare').innerHTML=(pn?`<div>Verschil netto</div><div class="right">${eur(net-Number(pn))}</div>`:'')+(pg?`<div>Verschil bruto</div><div class="right">${eur(gross-Number(pg))}</div>`:'');
+}
+function saveData(){
+ const data={settings:Object.fromEntries(['rate','ot150','ot200','sunday','night','clothes','studentRSZ','threshold','paidBreakDefault','payslipNet','payslipGross'].map(id=>[id,document.getElementById(id).value])),
+ rows:[...document.querySelectorAll('#rows tr')].map(tr=>({date:tr.querySelector('input[type=date]').value,work:tr.querySelector('.work').value,break:tr.querySelector('.break').value,sun:tr.querySelector('.sun').value,ot150:tr.querySelector('.ot150').value,ot200:tr.querySelector('.ot200').value,night:tr.querySelector('.night').value,clothes:tr.querySelector('.clothes').value})),
+ premiums:[...document.querySelectorAll('#premiums > div')].map(d=>({name:d.querySelector('.pname').value,amount:d.querySelector('.pamount').value})), expenses:[...document.querySelectorAll('#expenses > div')].map(d=>({name:d.querySelector('.ename').value,amount:d.querySelector('.eamount').value}))};
+ localStorage.setItem('looncontrole',JSON.stringify(data)); alert('Opgeslagen in deze browser.');
+}
+function loadData(){
+ const d=JSON.parse(localStorage.getItem('looncontrole')||'null'); if(!d){alert('Geen opgeslagen gegevens.');return}
+ Object.entries(d.settings||{}).forEach(([id,v])=>{if(document.getElementById(id))document.getElementById(id).value=v});
+ document.getElementById('rows').innerHTML='';(d.rows||[]).forEach(addRow);document.getElementById('premiums').innerHTML='';(d.premiums||[]).forEach(addPremium);document.getElementById('expenses').innerHTML='';(d.expenses||[]).forEach(addExpense);calc();
+}
+function resetAll(){if(!confirm('Alles wissen?'))return;localStorage.removeItem('looncontrole');location.reload()}
+['rate','ot150','ot200','sunday','night','clothes','studentRSZ','threshold','paidBreakDefault','payslipNet','payslipGross'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
+addRow({}); calc();
+</script>
+</body>
+</html>
