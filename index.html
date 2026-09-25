@@ -390,7 +390,7 @@ function autoPremiums(tr,force=false){
 
 function addExpense(data={name:'',amount:''}){
  const d=document.createElement('div');d.style.cssText='display:grid;grid-template-columns:1fr 150px 42px;gap:8px;margin-bottom:8px';
- d.innerHTML=`<input class="ename" placeholder="bv. sociaal abonnement / kosten eigen werkgever" value="${data.name||''}"><input class="eamount" type="number" step=".01" placeholder="€" value="${data.amount||''}"><button class="danger" onclick="this.parentElement.remove();calc()">×</button>`;
+ d.innerHTML=`<input class="ename" placeholder="bv. onkosten / extra premies" value="${data.name||''}"><input class="eamount" type="number" step=".01" placeholder="€" value="${data.amount||''}"><button class="danger" onclick="this.parentElement.remove();calc()">×</button>`;
  document.getElementById('expenses').appendChild(d);d.querySelectorAll('input').forEach(x=>x.addEventListener('input',calc));calc();
 }
 function addPreset(){
